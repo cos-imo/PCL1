@@ -2,9 +2,9 @@
 
 ## Sommaire
 
-0. [Sommaire](##Sommaire)
-1. [Liste des membres](## Liste des membres)
-2. [Sujet](##Sujet)
+0. [Sommaire](#Sommaire)
+1. [Liste des membres](#liste-des-membres)
+2. [Sujet](#Sujet)
 
 
 ## Liste des membres
