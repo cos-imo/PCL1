@@ -22,3 +22,8 @@
 * BUCHI Baptiste	[@Baptiste.Buchi		](https://gitlab.telecomnancy.univ-lorraine.fr/baptiste.buchi)[Baptiste.Buchi@telecomnancy.eu](Baptiste.Buchi@telecomnancy.eu)
 
 
+## Sujet
+
+Extrait du [sujet](./documents/Sujet.pdf) 2023-2024:
+
+> La partie PCL1 (octobre à mi-janvier) s'adressera à tous les élèves: il s'agit d'écrire les analyseurs lexicaux et syntaxiques, et d'implémenter la construction de l'arbre abstrait
