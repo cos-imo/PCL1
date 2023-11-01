@@ -1,0 +1,23 @@
++       || 1
+-       || 2
+*       || 3
+/       || 4
+:=      || 5
+'idf'   || 6
+'cte'   || 7
+
+mots = [
+    "access", "and", "begin", "else", "elsif", "end",
+    "false", "for", "function", "if", "in", "is",
+    "loop", "new", "not", "null", "or", "out",
+    "procedure", "record", "rem", "return", "reverse", "then",
+    "true", "type", "use", "while", "with"
+]      || 8 - 36
+:      || 37
+(      || 38
+)      || 39
+,      || 40
+;      || 41
+=      || 42
+.      || 43
+'      || 44
