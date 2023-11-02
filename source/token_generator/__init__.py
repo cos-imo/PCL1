@@ -1,0 +1,2 @@
+from token_analyser.token_analyser import analyse_token_compr
+from .token_generator import verbose

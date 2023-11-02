@@ -1,11 +1,5 @@
-
-
-file = open("source/exemple_ada_.txt", "r")
-
-table_idf = []
-
-
-
+from variables.variables import *
+from token_analyser.token_analyser import analyse_token_compr
 
 def tokeniser(file):
     """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
@@ -68,48 +62,15 @@ def tokeniser(file):
         
     return liste_token
 
+def verbose():
+    liste = tokeniser(file)
 
+    prog_tokeniser = []
+    for ligne in liste:
+        if len(ligne) > 1:
+            for token in ligne:
+                prog_tokeniser.append(token)
+    print(prog_tokeniser)
 
+    print(table_idf)
 
-def analyse_token_compr(token):
-
-
-    if token == "" or token == "\n":
-        return (-1, token)
-    
-    if token.isdigit():
-        return (7, token)
-
-    #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
-    mots = ['+','-','*','/',':=', None, None,
-    "access", "and", "begin", "else", "elsif", "end",
-    "false", "for", "function", "if", "in", "is",
-    "loop", "new", "not", "null", "or", "out",
-    "procedure", "record", "rem", "return", "reverse", "then",
-    "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'"
-    ]
-
-    if token in mots:
-        return mots.index(token) + 1
-    
-    if token[0].isalpha():
-        global table_idf
-        if token not in table_idf:
-            table_idf.append(token)
-        return (6, table_idf.index(token) + 1)
-
-    # enfin si un caractère n'est pas reconnue : on renvoie un token d'erreur de valeur -1
-    return (-1, token)
-
-
-
-liste = tokeniser(file)
-
-prog_tokeniser = []
-for ligne in liste:
-    if len(ligne) > 1:
-        for token in ligne:
-            prog_tokeniser.append(token)
-print(prog_tokeniser)
-
-print(table_idf)
