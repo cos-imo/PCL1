@@ -1,6 +1,6 @@
 
 
-file = open("exemple_ada_.txt", "r")
+file = open("source/exemple_ada_.txt", "r")
 
 table_idf = []
 
@@ -87,7 +87,8 @@ def analyse_token_compr(token):
     "loop", "new", "not", "null", "or", "out",
     "procedure", "record", "rem", "return", "reverse", "then",
     "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'"
-]
+    ]
+
     if token in mots:
         return mots.index(token) + 1
     
