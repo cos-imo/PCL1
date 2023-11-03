@@ -1,15 +1,7 @@
 from token_analyser import * 
-from variables import *
-
-file="Initial content"
-
-def init():
-    global file
-    file = variables.file
 
 def tokeniser(file):
     """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
-    init()
 
     liste_token = []
     for line in file:
@@ -69,7 +61,7 @@ def tokeniser(file):
         
     return liste_token
 
-def verbose():
+def verbose(file):
     liste = tokeniser(file)
 
     prog_tokeniser = []
@@ -79,5 +71,5 @@ def verbose():
                 prog_tokeniser.append(token)
     print(prog_tokeniser)
 
-    print(table_idf)
+    print(token_analyser.table_idf)
 

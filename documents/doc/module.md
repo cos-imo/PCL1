@@ -16,7 +16,7 @@ Ou, pour créer un module sans nom:
 ./modinit.sh
 ```
 
-### Structure de base d'un 
+### Structure de base d'un module
 
 ```
 .

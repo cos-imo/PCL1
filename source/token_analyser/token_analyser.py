@@ -1,4 +1,4 @@
-from variables.variables import *
+table_idf=[]
 
 def analyse_token_compr(token):
 

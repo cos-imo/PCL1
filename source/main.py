@@ -1,6 +1,5 @@
 from token_analyser import *
 from token_generator import *
-import variables 
 import sys, os
 
 if len(sys.argv)!=2:
@@ -10,8 +9,8 @@ if len(sys.argv)!=2:
     sys.stdout.write("\t\t\n")
 else:
     if os.path.isfile(sys.argv[-1]):
-        with open(sys.argv[-1], 'r') as data:
-            variables.file = data.readlines()
-            verbose()
+        with open(sys.argv[-1], 'r') as file:
+            data = file.readlines()
+            verbose(data)
     else:
         sys.stdout.write("ERREUR\nCompilation impossible: Fichier canAda non trouvé\n")
