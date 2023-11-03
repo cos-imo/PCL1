@@ -1,8 +1,15 @@
-from variables.variables import *
-from token_analyser.token_analyser import analyse_token_compr
+from token_analyser import * 
+from variables import *
+
+file="Initial content"
+
+def init():
+    global file
+    file = variables.file
 
 def tokeniser(file):
     """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
+    init()
 
     liste_token = []
     for line in file:
