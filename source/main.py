@@ -1,7 +1,9 @@
 from token_analyser import *
 from token_generator import *
+from arguments import args
 import sys, os
 
+"""
 if len(sys.argv)!=2:
     sys.stdout.write("ERREUR\n")
     sys.stdout.write("\tUsage:\tpython3 source/main.py [nom_du_fichier]\n")
@@ -14,3 +16,8 @@ else:
             verbose(data)
     else:
         sys.stdout.write("ERREUR\nCompilation impossible: Fichier canAda non trouvé\n")
+"""
+
+if len(sys.argv)==2:
+    data=args.sourcefile.readlines()
+    verbose(data)
