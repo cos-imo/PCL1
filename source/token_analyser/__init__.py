@@ -1,1 +1,1 @@
-from .token_analyser import analyse_token_compr
+from .token_analyser import token_analyser_t

@@ -1,75 +1,82 @@
 from token_analyser import * 
 
-def tokeniser(file):
-    """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
+class tokeniser_t:
 
-    liste_token = []
-    for line in file:
-        liste_token_ligne = []
-        ligne = list(line)
+    def __init__(self):
+        self.liste_token=[]
+        self.Analyser=token_analyser_t()
 
-        # on efface les commentaires
-        if '-' in ligne and ligne[ligne.index('-') + 1] == '-':
-            del ligne[ligne.index('-'):]
-        
-        #on va créer les tokens 
-        token = ""
-        in_string = False
-        for ind,lettre in enumerate(ligne):
-            if (lettre == " " or lettre  == "\n") and not in_string:
+    @staticmethod
+    def tokeniser(self, file):
+        """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
 
-                # on est la dans le cas ou on a un token qui est fini et on est pas dans une chaine de caractères
-                if token != "":
 
-                    #c est ici qu on va analyser le token et codé les unités lexicales
-                    tuple_token = analyse_token_compr(token)
-                    liste_token_ligne.append(tuple_token)
+        for line in file:
+            self.liste_token_ligne = []
+            ligne = list(line)
 
-                    token = ""
-            else :
-                if lettre == '"' and not in_string:
-                    # c est le début d un chaine de caractère
+            # On efface les commentaires
+            if '-' in ligne and ligne[ligne.index('-') + 1] == '-':
+                del ligne[ligne.index('-'):]
+            
+            # On va créer les tokens 
+            token = ""
+            in_string = False
+            for ind,lettre in enumerate(ligne):
+                if (lettre == " " or lettre  == "\n") and not in_string:
 
-                    liste_token_ligne.append(token)
-                    token = ""
-                    in_string = True
-                    continue
+                    # On est là dans le cas ou on a un token qui est fini et on est pas dans une chaine de caractères
+                    if token != "":
 
-                elif lettre == '"' and in_string:
-                    # c est la fin d une chaine de caractère
+                        # C'est ici qu on va analyser le token et coder les unités lexicales
+                        tuple_token = self.Analyser.analyse_token_compr(token)
+                        self.liste_token_ligne.append(tuple_token)
 
-                    in_string = False
-                    liste_token_ligne.append((11,token))
-                    token = ""
-                    continue
-                
-                elif lettre in (';',',',':','(',')','.',"'") and not in_string:
-                    #on doit vérifier si on a := ou juste : 
+                        token = ""
+                else :
+                    if lettre == '"' and not in_string:
+                        # C'est le début d un chaîne de caractère
 
-                    if lettre == ':' and ligne[ind+1] == '=':
-                        token += lettre
+                        self.liste_token_ligne.append(token)
+                        token = ""
+                        in_string = True
                         continue
 
-                    if token !='':
-                        liste_token_ligne.append(analyse_token_compr(token))
-                    liste_token_ligne.append(analyse_token_compr(lettre))
-                    token = ""
-                    continue
-                token += lettre
-        if liste_token_ligne != []:
-            liste_token.append(liste_token_ligne)
-        
-    return liste_token
+                    elif lettre == '"' and in_string:
+                        # c est la fin d une chaine de caractère
 
-def verbose(file):
-    liste = tokeniser(file)
+                        in_string = False
+                        self.liste_token_ligne.append((11,token))
+                        token = ""
+                        continue
+                    
+                    elif lettre in (';',',',':','(',')','.',"'") and not in_string:
+                        # On doit vérifier si on a := ou juste : 
 
-    prog_tokeniser = []
-    for ligne in liste:
-        if len(ligne) > 1:
-            for token in ligne:
-                prog_tokeniser.append(token)
-    print(prog_tokeniser)
+                        if lettre == ':' and ligne[ind+1] == '=':
+                            token += lettre
+                            continue
 
-    print(token_analyser.table_idf)
+                        if token !='':
+                            self.liste_token_ligne.append(self.Analyser.analyse_token_compr(token))
+                        self.liste_token_ligne.append(self.Analyser.analyse_token_compr(lettre))
+                        token = ""
+                        continue
+                    token += lettre
+            if self.liste_token_ligne != []:
+                self.liste_token.append(self.liste_token_ligne)
+            
+        return self.liste_token
+
+    def verbose(self,file):
+        liste = tokeniser_t.tokeniser(self, file)
+
+        prog_tokeniser = []
+        for ligne in liste:
+            if len(ligne) > 1:
+                for token in ligne:
+                    prog_tokeniser.append(token)
+        print(prog_tokeniser)
+
+        print(self.Analyser.table_idf)
 

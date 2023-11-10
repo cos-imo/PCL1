@@ -20,4 +20,5 @@ else:
 
 if len(sys.argv)==2:
     data=args.sourcefile.readlines()
-    verbose(data)
+    token_analyser_instance = tokeniser_t()
+    token_analyser_instance.verbose(data)
