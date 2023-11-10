@@ -18,7 +18,7 @@ else:
         sys.stdout.write("ERREUR\nCompilation impossible: Fichier canAda non trouvé\n")
 """
 
-if len(sys.argv)==2:
-    data=args.sourcefile.readlines()
-    token_analyser_instance = tokeniser_t()
+data=args.sourcefile.readlines()
+token_analyser_instance = tokeniser_t()
+if args.verbose:
     token_analyser_instance.verbose(data)
