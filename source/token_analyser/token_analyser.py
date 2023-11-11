@@ -2,7 +2,7 @@ class token_analyser_t():
 
     def __init__(self):
         self.table_idf = []
-        #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
+        #le codage des unités lexicales se trouve dans le fichier codage_des_lexiques.txt
         self.mots = ['+','-','*','/',':=', None, None,
         "access", "and", "begin", "else", "elsif", "end",
         "false", "for", "function", "if", "in", "is",
