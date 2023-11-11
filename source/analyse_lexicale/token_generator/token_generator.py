@@ -6,10 +6,8 @@ class tokeniser_t:
         self.liste_token=[]
         self.Analyser=token_analyser_t()
 
-    @staticmethod
-    def tokeniser(self, file):
+    def tokenise_file(self, file):
         """Fonction qui prend en paramètre un fichier et qui renvoie une liste de tokens"""
-
 
         for line in file:
             self.liste_token_ligne = []
@@ -65,18 +63,17 @@ class tokeniser_t:
                     token += lettre
             if self.liste_token_ligne != []:
                 self.liste_token.append(self.liste_token_ligne)
-            
+           
+        self.liste_token = [element for sousliste in self.liste_token for element in sousliste]
         return self.liste_token
-
-    def verbose(self,file):
-        liste = tokeniser_t.tokeniser(self, file)
-
-        prog_tokeniser = []
-        for ligne in liste:
-            if len(ligne) > 1:
-                for token in ligne:
-                    prog_tokeniser.append(token)
-        print(prog_tokeniser)
-
-        print(self.Analyser.table_idf)
+    
+    def verbose(self, file, verbose_mode):
+        print("mode verbose: activé")
+        token_liste = tokeniser_t.tokenise_file(self, file)
+        if verbose_mode in ["1", "2"]: 
+            print(" === LISTE DES TOKENS === ")
+            print(token_liste)
+        if verbose_mode in ["1","3"]:
+            print(" === TABLE D'IDENTIFICATION === ")
+            print(self.Analyser.table_idf)
 

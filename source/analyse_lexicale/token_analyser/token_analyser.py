@@ -11,15 +11,13 @@ class token_analyser_t():
         "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'"
         ]
 
-    def analyse_token_compr(self, token):
+    def analyse_token_compr(self,token):
 
         if token == "" or token == "\n":
             return (-1, token)
         
         if token.isdigit():
             return (7, token)
-
-        
 
         if token in self.mots:
             return self.mots.index(token) + 1

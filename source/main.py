@@ -6,7 +6,12 @@ import sys, os
 parser=Parser()
 
 data=parser.args.sourcefile.readlines()
-token_analyser_instance = tokeniser_t()
+token_analyser = tokeniser_t()
 
 if parser.args.verbose:
-    token_analyser_instance.verbose(data)
+    verbose_mode = parser.args.verbose   
+    token_analyser.verbose(data, verbose_mode)
+else:
+    sys.stdout.write("mode verbose: désactivé\n")
+    token_list=token_analyser.tokenise_file(data)
+    sys.stdout.write("Fichier compilé\n")
