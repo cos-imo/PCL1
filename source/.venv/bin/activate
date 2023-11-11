@@ -41,6 +41,13 @@ deactivate nondestructive
 VIRTUAL_ENV="/Users/cosimo/Documents/Scolaire/TN/2A/STIC/Projet Compil/Projet/source/.venv"
 export VIRTUAL_ENV
 
+VENV_DIR="$(cd "$(dirname "$BASH_SOURCE")" && pwd)"
+export VENV_DIR
+
+_OLD_PYTHON_PATH="$PYTHONPATH"
+PYTHONPATH="$VENV_DIR:$VENV_DIR/analyse_lexicale"
+export PYTHONPATH
+
 _OLD_VIRTUAL_PATH="$PATH"
 PATH="$VIRTUAL_ENV/bin:$PATH"
 export PATH
