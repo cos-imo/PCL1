@@ -6,7 +6,7 @@ class Automate:
         self.table_idf = []
         self.table_const = []
         self.liste_token = []
-        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + ["_"]
+        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + "_"
 
         #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
         self.mots = ['+','-','*','/',':=', None, None,
@@ -57,14 +57,19 @@ class Automate:
         list_token = []
         in_string = False
         in_const = False
+
+        # on va lire caractère par caractère le code
         while ind_cara_lu<len(code):
+
             cara = code[ind_cara_lu]
 
+            # cas de fin de string
             if in_string and cara != '"':
                 token_courant += cara
                 ind_cara_lu += 1
                 continue
 
+            # cas de fin de constante
             if in_const and not cara.isdigit() and cara != '.':
                 #cas de fin de constante
                 if token_courant not in self.table_const:
@@ -73,28 +78,27 @@ class Automate:
                 token_courant = ''
                 in_const = False
 
+            # cas de commentaire
             if cara == '-' and token_courant == '-' and not in_string:
+                #on ignire alors tout les caractères jusqu'à la fin de la ligne
                 while cara != '\n':
                     ind_cara_lu += 1
                     cara = code[ind_cara_lu]
                 ligne += 1
                 token_courant = ''
                 continue
-            if cara == '-' and not in_string:
-                code_current_token = self.codage_token(token_courant)
-                if code_current_token != -1 and code_current_token != None:
-                    list_token.append(code_current_token)
-                token_courant = cara
-                ind_cara_lu += 1
-                continue
+
                 
             if cara == '\n':
+                # si on est dans une chaine de caractrère on ajoute le \n au token courant 
+                # sinon on rajout juste le token courant à la liste des token et on ignore le caractère '\n'
                 if in_string:
                     token_courant += cara
                     ind_cara_lu += 1
                     continue
                 ligne += 1
                 ind_cara_lu += 1
+
                 if token_courant != '':
                     code_current_token = self.codage_token(token_courant)
                     if code_current_token != -1:
@@ -105,34 +109,48 @@ class Automate:
                     continue
 
             if cara == ' ' or cara == '\t':
+
+                # on garde les espaces dans les chaines de caractères
                 if in_string:
                     token_courant += cara
                     ind_cara_lu += 1
                     continue
+
+
+                # cas d'esapce hors chaine de caractère, on ignore alors juste ce caractère
+
+                # cas de plmusieurs espaces à la suite
                 if token_courant == '':
                     ind_cara_lu += 1
                     continue
-                code_current_token = self.codage_token(token_courant)
-                if code_current_token != -1 and code_current_token != None:
-                    list_token.append(code_current_token)
-                ind_cara_lu += 1
-                token_courant = ''
-                continue
+                else:
+                    code_current_token = self.codage_token(token_courant)
+                    if code_current_token != -1 and code_current_token != None:
+                        list_token.append(code_current_token)
+                    ind_cara_lu += 1
+                    token_courant = ''
+                    continue
 
+            # on garde le points dans les constantes pour pouvoir prendre les floatants
             if in_const :
                 if cara == '.' or cara.isdigit():
                     token_courant += cara
                     ind_cara_lu += 1
                     continue
+            
 
+            # cas de début de constante
             if cara.isdigit():
                 token_courant += cara
                 ind_cara_lu += 1
                 in_const = True
                 continue
 
+
+            # cas de détection de caractères spéciaux
             if cara in (';',',',':','(',')','.',"'",'"','+','-','*','/','=','>','<') :
 
+                # cas de détection de ':='
                 if cara == '=' and token_courant == ':'  and not in_string:
                     token_courant += cara
                     ind_cara_lu += 1
@@ -140,24 +158,26 @@ class Automate:
                     token_courant = ''
                     continue
 
+                # dans les autres cas le cara n'étant pas dans une chaine de caractère c est donc un séparateur et on place alors 
+                # le token courant dans la liste des token
                 code_current_token = self.codage_token(token_courant)
                 if code_current_token != -1 and code_current_token != None and not in_string:
                     list_token.append(code_current_token)
                     token_courant = ''
 
+                # si on a ':' on ne place pas dans la liste des token car cela oeut être un ':=' e vraie    
                 if cara == ':':
-
                     token_courant += cara
                     ind_cara_lu += 1
                     continue
                     
+                # cas de début d 'une chaine de caractère    
                 if cara == '"':
                     if in_string:
                         list_token.append(self.codage_token(token_courant))
                         token_courant = ''
                         in_string = False
                         ind_cara_lu += 1
-
                         continue
                     else:
                         token_courant = ''
@@ -220,10 +240,10 @@ class Automate:
 automate = Automate()
 
 
-"""
+
 with open('exemple_ada_.txt', 'r') as f:
     code = f.read()
     print(automate.est_accepte(code))
-"""
+
 
 reconstruit = automate.reconstruction("fichier_reconstruit.txt")
