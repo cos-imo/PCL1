@@ -5,6 +5,7 @@
 0. [Sommaire](#Sommaire)
 1. [Liste des membres](#liste-des-membres)
 2. [Sujet](#Sujet)
+3. [Suivi du développement](#suivi-du-developpement)
 
 
 ## Liste des membres
@@ -28,3 +29,13 @@
 Extrait du [sujet](./documents/Sujet.pdf) 2023-2024:
 
 > La partie PCL1 (octobre à mi-janvier) s'adressera à tous les élèves: il s'agit d'écrire les analyseurs lexicaux et syntaxiques, et d'implémenter la construction de l'arbre abstrait
+
+## Suivi du développement
+Afin de permettre à chacun de suivre l'avancement du projet et de ne pas se retrouver perdu devant les modifications effectuées par d'autres membres, le document [Suivi du développement](NULL) recoupe les denières modifications en dates et contient certains principes de développement associées au projet.
+
+## Déploiement et structure
+Afin de permettre la distribution du code, l'application python est exportée sur `pip`. La page relative au projet est disponible [ici](https://pypi.org/project/Compilateur-canAda-Zhou-Lo-Morel-Ungaro/) et peut donc être téléchargée avec
+```
+pip install Compilateur-canAda-Zhou-Lo-Morel-Ungaro
+```
+ATTENTION il s'agit ici d'une version non mise à jour du code (obsolète)
