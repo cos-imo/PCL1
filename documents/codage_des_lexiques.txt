@@ -1,10 +1,12 @@
+\n      || -1
+
 +       || 1
 -       || 2
 *       || 3
 /       || 4
 :=      || 5
-'idf'   || 6
-'cte'   || 7
+'idf'   || 6     =>on va avoir un bucket pour les identifiants
+'cte'   || 7     => de même que les identifiants
 
 mots = [
     "access", "and", "begin", "else", "elsif", "end",
@@ -21,3 +23,5 @@ mots = [
 =      || 42
 .      || 43
 '      || 44
+>      || 45
+<      || 46
