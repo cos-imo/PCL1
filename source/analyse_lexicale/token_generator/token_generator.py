@@ -64,9 +64,10 @@ class tokeniser_t:
             if self.liste_token_ligne != []:
                 self.liste_token.append(self.liste_token_ligne)
            
-        self.liste_token = [element for sousliste in self.liste_token for element in sousliste]
+        self.liste_token = [element for sousliste in self.liste_token for element in (sousliste if isinstance(sousliste, list) else [sousliste])]
+
         return self.liste_token
-    
+ 
     def verbose(self, file, verbose_mode):
         print("mode verbose: activé")
         token_liste = tokeniser_t.tokenise_file(self, file)
