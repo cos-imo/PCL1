@@ -1,0 +1,6 @@
+procedure Example_Function is
+   @Invalid_Identifier : Integer;  -- Erreur lexicale : Utilisation de '@' dans un identificateur
+begin
+   -- Corps de la fonction
+   null;
+end Example_Function;

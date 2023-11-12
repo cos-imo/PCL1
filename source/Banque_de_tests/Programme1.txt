@@ -1,0 +1,14 @@
+with Ada.Text_IO;
+
+procedure exemple is
+   n : integer ; 
+begin
+   loop
+      Ada.Text_IO.Put("Saisir un nombre : ") ; --recupère l'entrée
+      Ada.Text_IO.Get(n) ; 
+      if n mod 2 := 0  --vérifie que le nombre est pair ou non
+         then Ada.Text_IO.Put("Ce nombre est pair ! Bien joué !") ;
+         else Ada.Text_IO.Put("Ce nombre est impair ! Veuillez recommencer. ") ; 
+      end if ; 
+   end loop ; 
+end exemple ;
