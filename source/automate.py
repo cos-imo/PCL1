@@ -53,6 +53,7 @@ class Automate:
         ligne = 1
         list_token = []
         in_string = False
+        in_const = False
         while ind_cara_lu<len(code):
             cara = code[ind_cara_lu]
 
@@ -60,6 +61,14 @@ class Automate:
                 token_courant += cara
                 ind_cara_lu += 1
                 continue
+
+            if in_const and not cara.isdigit() and cara != '.':
+                #cas de fin de constante
+                if token_courant not in self.table_const:
+                    self.table_const.append(token_courant)
+                list_token.append((7, self.table_const.index(token_courant) + 1))
+                token_courant = ''
+                in_const = False
 
             if cara == '-' and token_courant == '-' and not in_string:
                 while cara != '\n':
@@ -76,6 +85,7 @@ class Automate:
                 ind_cara_lu += 1
                 continue
                 
+            
 
 
             if cara == '\n':
@@ -109,6 +119,20 @@ class Automate:
                 ind_cara_lu += 1
                 token_courant = ''
                 continue
+
+            if in_const :
+                if cara == '.' or cara.isdigit():
+                    token_courant += cara
+                    ind_cara_lu += 1
+                    continue
+
+
+            if cara.isdigit():
+                token_courant += cara
+                ind_cara_lu += 1
+                in_const = True
+                continue
+
 
             if cara in (';',',',':','(',')','.',"'",'"','+','-','*','/','=','>','<') :
 
@@ -207,9 +231,11 @@ class Automate:
 
 automate = Automate()
 
+
+"""
 with open('exemple_ada_.txt', 'r') as f:
     code = f.read()
     print(automate.est_accepte(code))
-
+"""
 
 reconstruit = automate.reconstruction("fichier_reconstruit.txt")
