@@ -1,13 +1,45 @@
 class Automate:
     def __init__(self, etats = {}, alphabet = {}, transitions = {}, etat_initial = None, etats_finaux = {}):
         self.etats = etats
-        self.alphabet = alphabet
+        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'
         self.transitions = transitions
         self.etat_initial = etat_initial
         self.etats_finaux = etats_finaux
+        self.table_idf = []
+        self.table_const = []
 
     def codage_token(self, token):
-        pass
+            if token == "\n":
+                return -1
+            
+            
+            if token == '':
+                return None
+            
+            if token.isdigit():
+                if token not in self.table_const:
+                    self.table_const.append(token)
+                return (7, self.table_const.index(token) + 1)
+
+            #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
+            mots = ['+','-','*','/',':=', None, None,
+            "access", "and", "begin", "else", "elsif", "end",
+            "false", "for", "function", "if", "in", "is",
+            "loop", "new", "not", "null", "or", "out",
+            "procedure", "record", "rem", "return", "reverse", "then",
+            "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
+        ]
+            if token in mots:
+                return mots.index(token) + 1
+            
+            if token[0].isalpha():
+                if token not in self.table_idf:
+                    self.table_idf.append(token)
+                return (6, self.table_idf.index(token) + 1)
+
+            # enfin si un caractère n'est pas reconnue : on renvoie un token d'erreur de valeur -1
+            return (-1, token)
+
 
     def est_accepte(self, code):
         """
@@ -24,31 +56,124 @@ class Automate:
         ind_cara_lu = 0
         ligne = 1
         list_token = []
+        in_string = False
         while ind_cara_lu<len(code):
-            if code[ind_cara_lu] not in self.alphabet:
-                # si le caractère n'est pas reconnue, alors on retourne une erreur
-                return list_token, ligne, False
-            
-            else:
-                token_courant += code[ind_cara_lu]
+            cara = code[ind_cara_lu]
 
-                # resultat c'est tout les mots qui commencent par token_courant qui peuvent être reconnue par l'automate
-                # ce sont les mots sur les transitions possible à partir de l'état courant
-                resultat = [cle for cle in self.transitions.keys() if cle.startswith(token_courant)]
+            if in_string and cara != '"':
+                token_courant += cara
+                ind_cara_lu += 1
+                continue
 
-                if resultat == []:
-                    # si le token n'est pas reconnue, alors on retourne une erreur
-                    return list_token, ligne, False
+            if cara == '-' and token_courant == '-' and not in_string:
+                while cara != '\n':
+                    ind_cara_lu += 1
+                    cara = code[ind_cara_lu]
+                ligne += 1
+                token_courant = ''
+                continue
+            if cara == '-' and not in_string:
+                code_current_token = self.codage_token(token_courant)
+                if code_current_token != -1 and code_current_token != None:
+                    list_token.append(code_current_token)
+                token_courant = cara
+                ind_cara_lu += 1
+                continue
                 
-                elif len(resultat) == 1:
-                    if resultat[0] == token_courant:
-                        # si le token est reconnue, alors on continue la lecture en passant à l'état suivant
-                        etat_courant = self.transitions[etat_courant][code[ind_cara_lu]]
-                        ind_cara_lu += 1
+
+
+            if cara == '\n':
+                if in_string:
+                    token_courant += cara
+                    ind_cara_lu += 1
+                    continue
+                ligne += 1
+                ind_cara_lu += 1
+                if token_courant != '':
+                    code_current_token = self.codage_token(token_courant)
+                    if code_current_token != -1:
+                        list_token.append(code_current_token)
                     else:
-                        ind_cara_lu +=1
+                        return list_token, ligne, False
+                    token_courant = ''
+                    continue
+
+
+            if cara == ' ' or cara == '\t':
+                if in_string:
+                    token_courant += cara
+                    ind_cara_lu += 1
+                    continue
+                if token_courant == '':
+                    ind_cara_lu += 1
+                    continue
+                code_current_token = self.codage_token(token_courant)
+                if code_current_token != -1 and code_current_token != None:
+                    list_token.append(code_current_token)
+                ind_cara_lu += 1
+                token_courant = ''
+                continue
+
+            if cara in (';',',',':','(',')','.',"'",'"','+','-','*','/','=','>','<') :
+
+                if cara == '=' and token_courant == ':'  and not in_string:
+                    token_courant += cara
+                    ind_cara_lu += 1
+                    list_token.append(5)
+                    token_courant = ''
+                    continue
+
+                code_current_token = self.codage_token(token_courant)
+                if code_current_token != -1 and code_current_token != None and not in_string:
+                    list_token.append(code_current_token)
+                    token_courant = ''
+
+                if cara == ':':
+
+                    token_courant += cara
+                    ind_cara_lu += 1
+                    continue
+                    
+                if cara == '"':
+                    if in_string:
+                        list_token.append(self.codage_token(token_courant))
+                        token_courant = ''
+                        in_string = False
+                        ind_cara_lu += 1
+
+                        continue
+                    else:
+                        token_courant = ''
+                        in_string = True
+                        ind_cara_lu += 1
+                        continue
+
+                
+                list_token.append(self.codage_token(cara))
+                token_courant = ''
+                ind_cara_lu += 1
+                continue
+            
+            if cara in self.alphabet:
+                token_courant += cara
+                ind_cara_lu += 1
+                continue
+
+            else:
+                ind_cara_lu += 1
+
+
+
+        list_token.append(self.codage_token(token_courant))
+        return list_token, ligne, True
 
 
 
 
+
+automate = Automate()
+
+with open('exemple_ada_.txt', 'r') as f:
+    code = f.read()
+    automate.est_accepte(code)
 
