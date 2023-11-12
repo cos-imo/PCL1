@@ -1,12 +1,10 @@
 class Automate:
-    def __init__(self, etats = {}, alphabet = {}, transitions = {}, etat_initial = None, etats_finaux = {}):
-        self.etats = etats
-        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'
-        self.transitions = transitions
-        self.etat_initial = etat_initial
-        self.etats_finaux = etats_finaux
+    def __init__(self):
+
         self.table_idf = []
         self.table_const = []
+        self.liste_token = []
+        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'
 
     def codage_token(self, token):
             if token == "\n":
@@ -50,8 +48,6 @@ class Automate:
         y a une erreur si il y en a une)
                     True ou false suivant la réussite ou non de la lecture complète du code
         """
-
-        etat_courant = self.etat_initial
         token_courant = ''
         ind_cara_lu = 0
         ligne = 1
@@ -165,9 +161,47 @@ class Automate:
 
 
         list_token.append(self.codage_token(token_courant))
-        return list_token, ligne, True
+        self.liste_token = list_token
+        return list_token[:-1], ligne, True
 
+    def reconstruction(self, adresse_txt):
+        """
+        ->return : code reconstruit à partir de la liste de token
+        """
+        code = ''
+        mots = ['+','-','*','/',':=', None, None,
+            "access", "and", "begin", "else", "elsif", "end",
+            "false", "for", "function", "if", "in", "is",
+            "loop", "new", "not", "null", "or", "out",
+            "procedure", "record", "rem", "return", "reverse", "then",
+            "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
+        ]
+        for token in self.liste_token:
 
+            if isinstance(token, tuple):
+                if token[0] == 6:
+                    code += self.table_idf[token[1] - 1]
+                elif token[0] == 7:
+                    code += self.table_const[token[1] - 1]
+                else:
+                    code += self.alphabet[token[0] - 1]
+            elif isinstance(token, int):
+                code += mots[token - 1]
+            if code[-1] == ';':
+                code += "\n"
+            else:
+                code +=' '
+
+            
+            
+        
+        def ecrire_code_reconstruit(self, adresse_txt):
+            """
+            Écrit le code reconstruit dans le fichier texte à l'adresse spécifiée.
+            """
+            with open(adresse_txt, 'w') as f:
+                f.write(code)
+        ecrire_code_reconstruit(self, adresse_txt)
 
 
 
@@ -175,5 +209,7 @@ automate = Automate()
 
 with open('exemple_ada_.txt', 'r') as f:
     code = f.read()
-    automate.est_accepte(code)
+    print(automate.est_accepte(code))
 
+
+reconstruit = automate.reconstruction("fichier_reconstruit.txt")
