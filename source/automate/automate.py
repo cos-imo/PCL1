@@ -63,6 +63,8 @@ class Automate:
 
             cara = code[ind_cara_lu]
 
+
+
             # cas de fin de string
             if in_string and cara != '"':
                 token_courant += cara
@@ -77,6 +79,7 @@ class Automate:
                 list_token.append((7, self.table_const.index(token_courant) + 1))
                 token_courant = ''
                 in_const = False
+                
 
             # cas de commentaire
             if cara == '-' and token_courant == '-' and not in_string:
@@ -141,7 +144,11 @@ class Automate:
 
             # cas de début de constante
             if cara.isdigit():
-                token_courant += cara
+                code_current_token = self.codage_token(token_courant)
+                if code_current_token != -1 and code_current_token != None:
+                    list_token.append(code_current_token)
+
+                token_courant = cara
                 ind_cara_lu += 1
                 in_const = True
                 continue
@@ -192,6 +199,7 @@ class Automate:
                 continue
             
             if cara in self.alphabet:
+                
                 token_courant += cara
                 ind_cara_lu += 1
                 continue
@@ -244,6 +252,9 @@ automate = Automate()
 with open('exemple_ada_.txt', 'r') as f:
     code = f.read()
     print(automate.est_accepte(code))
+    print(automate.table_const)
+    print(automate.table_idf)
+
 
 
 reconstruit = automate.reconstruction("fichier_reconstruit.txt")
