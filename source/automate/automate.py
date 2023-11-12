@@ -1,15 +1,26 @@
+import string as string
+
 class Automate:
     def __init__(self):
 
         self.table_idf = []
         self.table_const = []
         self.liste_token = []
-        self.alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_'
+        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + ["_"]
+
+        #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
+        self.mots = ['+','-','*','/',':=', None, None,
+            "access", "and", "begin", "else", "elsif", "end",
+            "false", "for", "function", "if", "in", "is",
+            "loop", "new", "not", "null", "or", "out",
+            "procedure", "record", "rem", "return", "reverse", "then",
+            "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
+        ]
+
 
     def codage_token(self, token):
             if token == "\n":
                 return -1
-            
             
             if token == '':
                 return None
@@ -19,23 +30,15 @@ class Automate:
                     self.table_const.append(token)
                 return (7, self.table_const.index(token) + 1)
 
-            #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
-            mots = ['+','-','*','/',':=', None, None,
-            "access", "and", "begin", "else", "elsif", "end",
-            "false", "for", "function", "if", "in", "is",
-            "loop", "new", "not", "null", "or", "out",
-            "procedure", "record", "rem", "return", "reverse", "then",
-            "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
-        ]
-            if token in mots:
-                return mots.index(token) + 1
+            if token in self.mots:
+                return self.mots.index(token) + 1
             
             if token[0].isalpha():
                 if token not in self.table_idf:
                     self.table_idf.append(token)
                 return (6, self.table_idf.index(token) + 1)
 
-            # enfin si un caractère n'est pas reconnue : on renvoie un token d'erreur de valeur -1
+            # enfin si un caractère n'est pas reconnu : on renvoie un token d'erreur de valeur -1
             return (-1, token)
 
 
@@ -85,9 +88,6 @@ class Automate:
                 ind_cara_lu += 1
                 continue
                 
-            
-
-
             if cara == '\n':
                 if in_string:
                     token_courant += cara
@@ -103,7 +103,6 @@ class Automate:
                         return list_token, ligne, False
                     token_courant = ''
                     continue
-
 
             if cara == ' ' or cara == '\t':
                 if in_string:
@@ -126,13 +125,11 @@ class Automate:
                     ind_cara_lu += 1
                     continue
 
-
             if cara.isdigit():
                 token_courant += cara
                 ind_cara_lu += 1
                 in_const = True
                 continue
-
 
             if cara in (';',',',':','(',')','.',"'",'"','+','-','*','/','=','>','<') :
 
@@ -193,13 +190,7 @@ class Automate:
         ->return : code reconstruit à partir de la liste de token
         """
         code = ''
-        mots = ['+','-','*','/',':=', None, None,
-            "access", "and", "begin", "else", "elsif", "end",
-            "false", "for", "function", "if", "in", "is",
-            "loop", "new", "not", "null", "or", "out",
-            "procedure", "record", "rem", "return", "reverse", "then",
-            "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
-        ]
+        
         for token in self.liste_token:
 
             if isinstance(token, tuple):
@@ -210,14 +201,11 @@ class Automate:
                 else:
                     code += self.alphabet[token[0] - 1]
             elif isinstance(token, int):
-                code += mots[token - 1]
+                code += self.mots[token - 1]
             if code[-1] == ';':
                 code += "\n"
             else:
                 code +=' '
-
-            
-            
         
         def ecrire_code_reconstruit(self, adresse_txt):
             """
