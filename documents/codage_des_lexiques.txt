@@ -25,3 +25,4 @@ mots = [
 '      || 44
 >      || 45
 <      || 46
+'str'  || 47  => les chaînes de caractère se trouverons dans leur propre bucket
