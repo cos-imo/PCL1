@@ -29,7 +29,7 @@ class Parser:
         self.parser.add_argument('-t', '--token-list', help="Affiche la liste des tokens générés (équivalent au second mode de verbose)")
         self.parser.add_argument('-i', '--table-identificateurs', help="Affiche la table des identificateurs (équivalent au troisième mode de verbose)")
 
-        self.parser.add_argument('-d', '--create-dump', nargs='?', const=1, choices=["1","2","3"], type=self.parse_dump_mode, help="Exporte les données dans un fichier")
+        self.parser.add_argument('-d', '--create-dump', nargs=2, metavar=('INT', 'FILE'), default=1, choices=["1","2","3"], type=self.parse_dump_mode, help="Exporte les données dans un fichier")
 
         self.args = self.parser.parse_args()
 
