@@ -42,7 +42,7 @@ class Automate:
             # enfin si un caractère n'est pas reconnu : on renvoie un token d'erreur de valeur -1
             return (-1, token)
     
-    def gene_message_erreur(self, token_courant, cara, ligne):
+    def gene_message_erreur(self, token_courant, cara, ligne, type_erreur):
         """
         ->param token_courant : token courant
         ->param cara : caractère non reconnu
@@ -77,7 +77,7 @@ class Automate:
         # on va dabors récupére les derniers token analyser
         code += token_courant + '_'
 
-        message_erreur = f"Erreur à la ligne  {ligne}  : caractère non reconnu : {cara} \n {code} \n{(len(code) - 1)*' '}'^'"
+        message_erreur = f"Erreur à la ligne  {ligne}  : { type_erreur } : {cara} \n {code} \n{(len(code) - 1)*' '}'^'"
         return message_erreur
 
 
@@ -113,6 +113,10 @@ class Automate:
             # cas de fin de constante
             if in_const and not cara.isdigit() and cara != '.':
                 #cas de fin de constante
+                if token_courant.count('.') > 1:
+                    message_erreur = self.gene_message_erreur(token_courant, cara, ligne, "Nombre à virgule invalide")
+                    self.etat_comp  = False
+                    return self.liste_token, ligne, False, message_erreur
                 if token_courant not in self.table_const:
                     self.table_const.append(token_courant)
                 self.liste_token.append((7, self.table_const.index(token_courant) + 1))
