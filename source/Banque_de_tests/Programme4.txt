@@ -1,0 +1,8 @@
+with Ada.Text_IO;
+
+procedure Mot_Reserve is
+   for : Integer := 123;  -- Erreur lexicale : Utilisation d'un mot réservé
+begin
+   -- Corps de la fonction
+   null;
+end Mot_Reserve;

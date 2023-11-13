@@ -1,7 +1,7 @@
 with Ada.Text_IO;
 
 procedure Erreur_Lexicale is
-   Invalid_Integer : Integer := 1@23;  -- Erreur lexicale : Utilisation de '@' dans un nombre entier
+   @Invalid_Identifier : Integer;  -- Erreur lexicale : Utilisation de '@' dans un identificateur
 begin
    -- Corps de la fonction
    null;
