@@ -8,6 +8,7 @@ class Automate:
         self.liste_token = []
         self.alphabet = string.ascii_lowercase + string.ascii_uppercase + "_"
         self.etat_comp = None  # None si pas encore faite, True si réussite, False si échec
+        self.token_par_ligne = [] # liste des nombre de token par ligne (ça va permettre de retrouver la ligne d'erreur lors de l'analyse syntaxique)
 
         #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
         self.mots = ['+','-','*','/',':=', None, None,
@@ -96,6 +97,7 @@ class Automate:
         ligne = 1
         in_string = False
         in_const = False
+        self.token_par_ligne.append(0)
 
         # on va lire caractère par caractère le code
         while ind_cara_lu<len(code):
@@ -120,6 +122,7 @@ class Automate:
                 if token_courant not in self.table_const:
                     self.table_const.append(token_courant)
                 self.liste_token.append((7, self.table_const.index(token_courant) + 1))
+                self.token_par_ligne[-1]+=1
                 token_courant = ''
                 in_const = False
                 
@@ -146,6 +149,9 @@ class Automate:
                     code_current_token = self.codage_token(token_courant)
                     if code_current_token != -1 and code_current_token != None:
                         self.liste_token.append(code_current_token)
+                        self.token_par_ligne[-1]+=1
+                    # nouvelle ligne donc 0 pour recommencer à compté le nombre de token sur la prochaine ligne
+                    self.token_par_ligne.append(0)
                     token_courant = ''
                     ind_cara_lu += 1
                     ligne += 1
@@ -180,6 +186,7 @@ class Automate:
                     code_current_token = self.codage_token(token_courant)
                     if code_current_token != -1 and code_current_token != None:
                         self.liste_token.append(code_current_token)
+                        self.token_par_ligne[-1]+=1
                     ind_cara_lu += 1
                     token_courant = ''
                     continue
@@ -197,6 +204,7 @@ class Automate:
                 code_current_token = self.codage_token(token_courant)
                 if code_current_token != -1 and code_current_token != None:
                     self.liste_token.append(code_current_token)
+                    self.token_par_ligne[-1]+=1
 
                 token_courant = cara
                 ind_cara_lu += 1
@@ -211,6 +219,7 @@ class Automate:
                     code_current_token = self.codage_token(token_courant)
                     if code_current_token != -1 and code_current_token != None:
                         self.liste_token.append(code_current_token)
+                        self.token_par_ligne[-1]+=1
                     token_courant = cara
                     ind_cara_lu += 1
                     continue
@@ -220,6 +229,7 @@ class Automate:
                     token_courant += cara
                     ind_cara_lu += 1
                     self.liste_token.append(5)
+                    self.token_par_ligne[-1]+=1
                     token_courant = ''
                     continue
 
@@ -228,6 +238,7 @@ class Automate:
                 code_current_token = self.codage_token(token_courant)
                 if code_current_token != -1 and code_current_token != None and not in_string:
                     self.liste_token.append(code_current_token)
+                    self.token_par_ligne[-1]+=1
                     token_courant = ''
 
                 # si on a ':' on ne place pas dans la liste des token car cela oeut être un ':=' e vraie    
@@ -240,6 +251,7 @@ class Automate:
                 if cara == '"':
                     if in_string:
                         self.liste_token.append(self.codage_token(token_courant))
+                        self.token_par_ligne[-1]+=1
                         token_courant = ''
                         in_string = False
                         ind_cara_lu += 1
@@ -252,6 +264,7 @@ class Automate:
 
                 
                 self.liste_token.append(self.codage_token(cara))
+                self.token_par_ligne[-1]+=1
                 token_courant = ''
                 ind_cara_lu += 1
                 continue
@@ -272,6 +285,7 @@ class Automate:
 
 
         self.liste_token.append(self.codage_token(token_courant))
+        self.token_par_ligne[-1]+=1
         self.etat_comp = True
         return self.liste_token[:-1], ligne, True
 
@@ -282,7 +296,16 @@ class Automate:
         code = ''
         if self.etat_comp == False:
             return "Erreur de compilation, reconstruction impossible"
+        compteur_token = 0
+        num_ligne = 0
         for token in self.liste_token:
+            if compteur_token == self.token_par_ligne[num_ligne]:
+                code += '\n'
+                num_ligne += 1
+                compteur_token = 0
+                while self.token_par_ligne[num_ligne] == 0:
+                    num_ligne += 1
+                    code += '\n'
 
             if isinstance(token, tuple):
                 if token[0] == 6:
@@ -293,10 +316,10 @@ class Automate:
                     code += self.alphabet[token[0] - 1]
             elif isinstance(token, int):
                 code += self.mots[token - 1]
-            if code[-1] == ';':
-                code += "\n"
-            else:
-                code +=' '
+            code +=' '
+            compteur_token += 1
+            print(compteur_token, num_ligne, token)
+
         
         def ecrire_code_reconstruit(self, adresse_txt):
             """
@@ -320,7 +343,7 @@ with open('exemple_ada_.txt', 'r') as f:
     print(code_compi[0])
     if not code_compi[2]:
         print(code_compi[3])
-
+    print(automate.token_par_ligne)
 
 
 reconstruit = automate.reconstruction("fichier_reconstruit.txt")
