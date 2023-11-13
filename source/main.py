@@ -14,12 +14,13 @@ if parser.args.verbose:
     token_analyser.verbose(data, verbose_mode)
 else:
     sys.stdout.write("mode verbose: désactivé\n")
-    token_list=token_analyser.tokenise_file(data)
+    token_list=token_analyser.est_accepte(data)
     sys.stdout.write("Fichier compilé\n")
 
 if parser.args.create_dump:
    sys.stdout.write("Création du fichier dump\n")
    exporter=data_exporter()
-   token_list=token_analyser.tokenise_file(data)
+   token_list=token_analyser.est_accepte(data)
    dump_mode=parser.args.create_dump
+   print(parser.args.create_dump)
    exporter.create_dump_file(token_list, dump_mode)
