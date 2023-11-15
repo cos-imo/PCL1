@@ -64,6 +64,7 @@ class Automate:
 
         # on va dabors récupére les derniers token analyser (on récupère la dernière ligne de code)
         code = token_courant 
+        ind = 0
         if self.liste_token[-1] == 41:
             code = ':' + code
             ind += 1
@@ -79,15 +80,17 @@ class Automate:
                 elif self.liste_token[-ind][0] == 7:
                     code = self.table_const[self.liste_token[-ind][1] - 1]  + code
 
+                elif self.table_chaine_cara[-ind][0] == 47:
+                    code = '"' + self.table_chaine_cara[self.liste_token[-ind][1] - 1] + '"' + code
                 else:
                     code = self.alphabet[self.liste_token[-ind][0] - 1]     + code
 
             elif isinstance(self.liste_token[-ind], int):
                 code = self.mots[self.liste_token[-ind] - 1] + code
-            else:
-                code =' ' + code
+            
+            code =' ' + code
             ind += 1
-        code += token_courant + '_'
+        code +=  '_'
 
         # création du message d'erreur
         message_erreur = f"Erreur à la ligne  {ligne}  : { type_erreur } : {cara} \n {code} \n{(len(code) - 1)*' '}'^'"
@@ -131,6 +134,7 @@ class Automate:
                 if token_courant.count('.') > 1:
                     message_erreur = self.gene_message_erreur(token_courant, cara, ligne, "Nombre à virgule invalide")
                     self.etat_comp  = False
+                    print(message_erreur)
                     return self.liste_token, ligne, False, message_erreur
                 
                 # on ajout la constante à la table des constantes
@@ -219,7 +223,22 @@ class Automate:
 
             # cas de détection de caractères spéciaux
             if cara in (';',',',':','(',')','.',"'",'"','+','-','*','/','=','>','<') :
-
+                # cas de début et de fin d 'une chaine de caractère    
+                if cara == '"':
+                    if in_string:
+                        self.table_chaine_cara.append(token_courant)
+                        self.liste_token.append((47, self.table_chaine_cara.index(token_courant) + 1))
+                        self.token_par_ligne[-1]+=1
+                        token_courant = ''
+                        in_string = False
+                        ind_cara_lu += 1
+                        continue
+                    else:
+                        token_courant = ''
+                        in_string = True
+                        ind_cara_lu += 1
+                        continue
+                    
                 if cara == '-':
 
                     if token_courant not in ('',' ', '\t', '\n'):
@@ -254,21 +273,7 @@ class Automate:
                     ind_cara_lu += 1
                     continue
                     
-                # cas de début et de fin d 'une chaine de caractère    
-                if cara == '"':
-                    if in_string:
-                        self.table_chaine_cara.append(token_courant)
-                        self.liste_token.append((47, self.table_chaine_cara.index(token_courant) + 1))
-                        self.token_par_ligne[-1]+=1
-                        token_courant = ''
-                        in_string = False
-                        ind_cara_lu += 1
-                        continue
-                    else:
-                        token_courant = ''
-                        in_string = True
-                        ind_cara_lu += 1
-                        continue
+
 
                 
                 self.liste_token.append(self.codage_token(cara))
@@ -285,9 +290,9 @@ class Automate:
 
             else:
                 # si le caractère n'est traité par aucuns des cas au dessus c'est qu'il n'est pas reconnu
-                message_erreur = self.gene_message_erreur(token_courant, cara, ligne)
+                message_erreur = self.gene_message_erreur(token_courant, cara, ligne, "Caractère non reconnu")
                 self.etat_comp  = False
-                
+                print(message_erreur)
                 return self.liste_token, ligne, False, message_erreur
 
 
@@ -345,12 +350,20 @@ automate = Automate()
 with open('exemple_ada_.txt', 'r') as f:
     code = f.read()
     code_compi = automate.est_accepte(code)
-    #print(automate.table_const)
-    #print(automate.table_idf)
-    print(code_compi[0])
+    print('\n')
+    print(f'{automate.table_const = }')
+    print('\n')
+    print(f'{automate.table_idf = }')
+    print('\n')
+    print(f'{automate.table_chaine_cara = }')
+    print('\n')
+    print(f'code tokenizé : {code_compi[0]  }')
+    
+    """
     if not code_compi[2]:
         print(code_compi[3])
     print(automate.token_par_ligne)
+    """
 
 
 reconstruit = automate.reconstruction("fichier_reconstruit.txt")
