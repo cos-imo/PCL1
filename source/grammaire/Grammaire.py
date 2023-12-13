@@ -18,7 +18,14 @@ class Grammaire:
 	            exit()
 
 	def initialiser_regles(self):
-		manager = RegleManager.RegleManager(self.grammaire_brute)
+		self.manager = RegleManager.RegleManager(self.grammaire_brute)
+
+	def __repr__(self):
+		repr_str = "Grammaire\n\n"
+		for regle in self.manager.ensemble_regles:
+			repr_str += regle.__repr__()
+		return repr_str
 	            
 if __name__=="__main__":
 	grammaire = Grammaire()
+	print(grammaire)

@@ -2,6 +2,9 @@ import Grammaire
 import Regle
 
 class RegleManager:
+
+	ensemble_regles = []
+
 	def __init__(self, ensemble_de_regles):
 		self.ensemble_raw = ensemble_de_regles
 		self.ensemble_regles = []
@@ -21,8 +24,6 @@ class RegleManager:
 				regle = Regle.Regle(len(self.ensemble_regles), expression)
 				self.ensemble_regles.append(regle)
 				self.ensemble_regles = list(set(self.ensemble_regles))
-				print(regle)
-				print(self.ensemble_regles)
 				return
 	
 	def initialiser_regles(self):

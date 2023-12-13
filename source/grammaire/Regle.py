@@ -15,7 +15,6 @@ class Regle:
 
 		self.initialiser_non_terminaux()
 		self.initialiser_terminaux()
-		sys.stdout.write("Création de la règle\n")
 		
 	def decoupe(self, regle_brute):
 		return regle_brute.split("->")
@@ -32,4 +31,4 @@ class Regle:
 			self.terminaux = list(set(self.terminaux))
 
 	def __repr__(self):
-		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\tPremiers: "
+		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\tPremiers: \n"
