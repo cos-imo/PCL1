@@ -11,6 +11,9 @@ class Regle:
 		self.non_terminaux = []
 		self.terminaux = []
 
+		self.membre_gauche = self.decoupe_membre_gauche()
+		self.membre_droit = self.decoupe_membre_droit()
+
 		self.regle_decoupee = self.decoupe(expression)
 
 		self.initialiser_non_terminaux()
@@ -29,6 +32,12 @@ class Regle:
 		for line in self.regle_decoupee:
 			self.terminaux += [char for char in line[1].split(" ") if char.islower()]
 			self.terminaux = list(set(self.terminaux))
+
+	def decoupe_membre_droit(self):
+		return [element for element in self.raw_regle.split("->")[1].split(" ") if element !='']
+
+	def decoupe_membre_gauche(self):
+		return self.raw_regle.split("->")[0]
 
 	def __repr__(self):
 		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\tPremiers: \n"

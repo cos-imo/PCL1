@@ -9,6 +9,9 @@ class RegleManager:
 		self.ensemble_raw = ensemble_de_regles
 		self.ensemble_regles = []
 		self.initialiser_regles()
+		self.premiers = {}
+		self.suivants = {}
+		self.ajouter_premier()
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
@@ -25,6 +28,12 @@ class RegleManager:
 				self.ensemble_regles.append(regle)
 				self.ensemble_regles = list(set(self.ensemble_regles))
 				return
+	
+	def ajouter_premier(self):
+		for regle in self.ensemble_regles:
+			if (regle.membre_droit[0] not in self.premiers) and (regle.membre_droit[0].islower()):
+				self.premiers[regle] = regle.membre_droit[0]
+			
 	
 	def initialiser_regles(self):
 		for regle in self.ensemble_raw:
