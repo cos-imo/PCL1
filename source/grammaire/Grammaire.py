@@ -3,7 +3,8 @@ import Regle
 
 class Grammaire:
 	def __init__(self):
-		print("Grammaire initialisée")
+        	self.charger_grammaire()
+        	print("Grammaire initialisée")
 
 	def charger_grammaire(self):
 	        try:
@@ -14,6 +15,12 @@ class Grammaire:
 	        except:
 	            sys.stdout.write("Warning: Fichier input.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état 	actuel des choses, désolé\n")
 	            exit()
+	            
+	def decoupe(self, grammaire_brute):
+		grammaire_decoupee = []
+		for line in grammaire_brute:
+			grammaire_decoupee.append(line.split(" -> "))
+		return grammaire_decoupee
 
 if __name__=="__main__":
 	grammaire = Grammaire()
