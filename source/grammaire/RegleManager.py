@@ -12,6 +12,7 @@ class RegleManager:
 		self.premiers = {}
 		self.suivants = {}
 		self.ajouter_premier()
+		print(self.premiers)
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
@@ -30,9 +31,21 @@ class RegleManager:
 				return
 	
 	def ajouter_premier(self):
+		queue = []
 		for regle in self.ensemble_regles:
 			if (regle.membre_droit[0] not in self.premiers) and (regle.membre_droit[0].islower()):
-				self.premiers[regle] = regle.membre_droit[0]
+				self.premiers[regle.membre_gauche.replace(" ","")] = regle.membre_droit[0].replace(" ","")
+			else:
+				if (regle.membre_gauche in self.premiers):
+					self.premiers[regle.membre_gauche.replace(" ","")] += self.premiers[regle.membre_droit[0]]
+				else:
+					queue.append(regle)
+			for element in queue:
+				if regle.membre_droit[0] in self.premiers:
+					self.premiers[element.membre_gauche.replace(" ","")] = self.premiers[regle.membre_droit[0]]
+					queue.remove(element)
+				else:
+					print("Erreur: " + regle.membre_gauche + " n'a pas de premiers")
 			
 	
 	def initialiser_regles(self):
