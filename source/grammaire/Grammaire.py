@@ -8,7 +8,9 @@ class Grammaire:
 		self.non_terminaux = []
 		self.terminaux = []
 		self.initialiser_non_terminaux()
+		self.initialiser_terminaux()
 		print(self.non_terminaux)
+		print(self.terminaux)
 
 	def charger_grammaire(self):
 	        try:
@@ -31,6 +33,11 @@ class Grammaire:
 			self.non_terminaux.append(line[0])
 			self.non_terminaux += [char for char in line[1].split(" ") if char.isupper()]
 			self.non_terminaux = list(set(self.non_terminaux))
+
+	def initialiser_terminaux(self):
+		for line in self.grammaire_decoupee:
+			self.terminaux += [char for char in line[1].split(" ") if char.islower()]
+			self.terminaux = list(set(self.terminaux))
 
 
 if __name__=="__main__":
