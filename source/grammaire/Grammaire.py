@@ -3,8 +3,12 @@ import Regle
 
 class Grammaire:
 	def __init__(self):
-        	self.charger_grammaire()
-        	print("Grammaire initialisée")
+		self.grammaire_brute = self.charger_grammaire()
+		self.grammaire_decoupee = self.decoupe(self.grammaire_brute)
+		self.non_terminaux = []
+		self.terminaux = []
+		self.initialiser_non_terminaux()
+		print(self.non_terminaux)
 
 	def charger_grammaire(self):
 	        try:
@@ -21,6 +25,13 @@ class Grammaire:
 		for line in grammaire_brute:
 			grammaire_decoupee.append(line.split(" -> "))
 		return grammaire_decoupee
+
+	def initialiser_non_terminaux(self):
+		for line in self.grammaire_decoupee:
+			self.non_terminaux.append(line[0])
+			self.non_terminaux += [char for char in line[1].split(" ") if char.isupper()]
+			self.non_terminaux = list(set(self.non_terminaux))
+
 
 if __name__=="__main__":
 	grammaire = Grammaire()
