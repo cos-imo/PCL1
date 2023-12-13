@@ -1,5 +1,6 @@
 import sys
 import math
+import RegleManager
 
 class Regle:
 

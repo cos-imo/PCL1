@@ -22,7 +22,7 @@ class RegleManager:
 			return
 		for regle in self.ensemble_regles:
 			if ((regle.raw_regle) == expression):
-				print("Doublon trouvé: " +expression)
+				print("Doublon trouvé: " + expression)
 				return
 			else:
 				regle = Regle.Regle(len(self.ensemble_regles), expression)
@@ -33,19 +33,26 @@ class RegleManager:
 	def ajouter_premier(self):
 		queue = []
 		for regle in self.ensemble_regles:
-			if (regle.membre_droit[0] not in self.premiers) and (regle.membre_droit[0].islower()):
-				self.premiers[regle.membre_gauche.replace(" ","")] = regle.membre_droit[0].replace(" ","")
+			if regle.membre_droit[0].islower():
+				if regle.membre_gauche.replace(" ","") not in self.premiers:
+					self.premiers[regle.membre_gauche.replace(" ","")] = regle.membre_droit[0].replace(" ","")
+				else:
+					self.premiers[regle.membre_gauche.replace(" ","")] += regle.membre_droit[0].replace(" ","")
 			else:
-				if (regle.membre_gauche in self.premiers):
-					self.premiers[regle.membre_gauche.replace(" ","")] += self.premiers[regle.membre_droit[0]]
+				if regle.membre_droit[0] in self.premiers:
+					if regle.membre_gauche.replace(" ","") not in self.premiers:
+						self.premiers[regle.membre_gauche.replace(" ","")] = self.premiers[regle.membre_droit[0].replace(" ","")]
+					else:
+						self.premiers[regle.membre_gauche.replace(" ","")] += self.premiers[regle.membre_droit[0].replace(" ","")]
 				else:
 					queue.append(regle)
-			for element in queue:
-				if regle.membre_droit[0] in self.premiers:
-					self.premiers[element.membre_gauche.replace(" ","")] = self.premiers[regle.membre_droit[0]]
-					queue.remove(element)
-				else:
-					print("Erreur: " + regle.membre_gauche + " n'a pas de premiers")
+
+		for element in queue:
+			if regle.membre_droit[0] in self.premiers:
+				self.premiers[element.membre_gauche.replace(" ","")] = self.premiers[regle.membre_droit[0].replace(" ","")]
+				queue.remove(element)
+			else:
+				print("Erreur: " + regle.membre_gauche + " n'a pas de premiers.\n Vérifiez votre grammaire.")
 			
 	
 	def initialiser_regles(self):

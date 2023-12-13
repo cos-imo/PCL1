@@ -1,2 +1,3 @@
-S ->  A a S b A
-A -> a
+S -> A a S b A
+A -> B a
+B -> d
