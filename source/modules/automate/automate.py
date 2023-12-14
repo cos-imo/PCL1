@@ -356,4 +356,4 @@ def main(fichier):
         ###
     """
 
-    reconstruit = automate.reconstruction("fichier_reconstruit.txt")
+    reconstruit = automate.reconstruction("output/fichier_reconstruit.txt")
