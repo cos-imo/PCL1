@@ -339,8 +339,6 @@ class Automate:
 def main(fichier):
     automate = Automate()
 
-
-
     code_compi = automate.est_accepte(fichier)
     print('\n')
     print(f'{automate.table_const = }')
