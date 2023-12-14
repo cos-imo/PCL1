@@ -1,6 +1,9 @@
 from automate import *
 from arguments import Parser 
 from export import * 
+from token_analyser import *
+from token_generator import *
+from error_handler import *
 import sys, os
 
 parser=Parser()
