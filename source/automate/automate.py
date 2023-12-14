@@ -119,8 +119,6 @@ class Automate:
 
             cara = code[ind_cara_lu]
 
-
-
             # cas ou on est dans une chaine de caractère
             if in_string and cara != '"':
                 token_courant += cara
@@ -272,9 +270,6 @@ class Automate:
                     token_courant += cara
                     ind_cara_lu += 1
                     continue
-                    
-
-
                 
                 self.liste_token.append(self.codage_token(cara))
                 self.token_par_ligne[-1]+=1
@@ -294,7 +289,6 @@ class Automate:
                 self.etat_comp  = False
                 print(message_erreur)
                 return self.liste_token, ligne, False, message_erreur
-
 
         if token_courant not in ('',' ', '\t', '\n'):
             self.liste_token.append(self.codage_token(token_courant))
@@ -342,14 +336,12 @@ class Automate:
         ecrire_code_reconstruit(self, adresse_txt)
 
 
+def main(fichier):
+    automate = Automate()
 
-automate = Automate()
 
 
-
-with open('exemple_ada_.txt', 'r') as f:
-    code = f.read()
-    code_compi = automate.est_accepte(code)
+    code_compi = automate.est_accepte(fichier)
     print('\n')
     print(f'{automate.table_const = }')
     print('\n')
@@ -358,12 +350,12 @@ with open('exemple_ada_.txt', 'r') as f:
     print(f'{automate.table_chaine_cara = }')
     print('\n')
     print(f'code tokenizé : {code_compi[0]  }')
-    
-    """
-    if not code_compi[2]:
-        print(code_compi[3])
-    print(automate.token_par_ligne)
+        
+    """        ###
+        if not code_compi[2]:
+            print(code_compi[3])
+        print(automate.token_par_ligne)
+        ###
     """
 
-
-reconstruit = automate.reconstruction("fichier_reconstruit.txt")
+    reconstruit = automate.reconstruction("fichier_reconstruit.txt")

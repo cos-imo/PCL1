@@ -1,12 +1,13 @@
-from token_analyser import *
-from token_generator import *
+from automate import *
 from arguments import Parser 
 from export import * 
 import sys, os
 
 parser=Parser()
 
-data=parser.args.sourcefile.readlines()
+data=parser.args.sourcefile.read()
+
+"""
 token_analyser = tokeniser_t()
 
 if parser.args.verbose:
@@ -20,7 +21,10 @@ else:
 if parser.args.create_dump:
    sys.stdout.write("Création du fichier dump\n")
    exporter=data_exporter()
-   token_list=token_analyser.est_accepte(data)
+   token_list=token_analyser.codage_token(data)
    dump_mode=parser.args.create_dump
    print(parser.args.create_dump)
    exporter.create_dump_file(token_list, dump_mode)
+"""
+
+main(data)
