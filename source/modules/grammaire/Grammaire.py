@@ -7,10 +7,21 @@ class Grammaire:
 		self.grammaire_brute = self.charger_grammaire()
 		self.initialiser_regles()
 
+        self.terminaux = []
+        self.non_terminaux = []
+
+        self.identifications_terminaux()
+
+    def identifications_terminaux(self):
+
+
+
 	def charger_grammaire(self):
+            #on ouvre le fichier
 	        try:
 	            with open("./input.gramm","r") as file:
 	                data = file.readlines()
+                    # On lit les données et on retourne la grammaire
 	                self.grammaire_brute = [element.replace("\n","") for element in data]
 	                return self.grammaire_brute
 	        except:
