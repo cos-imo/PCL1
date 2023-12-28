@@ -37,7 +37,7 @@ class RegleManager:
 				return
 	
 	def ajouter_premier_terminaux(self):
-        """
+		"""
         Calcule les premiers de chaque terminal
         """
 		queue = []
@@ -92,7 +92,7 @@ class RegleManager:
 			
 	
 	def initialiser_regles(self):
-        """
+		"""
         Appelle self.ajoute_regle pour chaque règle contenue dans le fichier
         """
 		for regle in self.ensemble_raw:
