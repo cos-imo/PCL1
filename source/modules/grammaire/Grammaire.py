@@ -1,9 +1,11 @@
 import sys
 import Regle
 import RegleManager
+import copy
 
 class Grammaire:
     def __init__(self):
+        self.keywords=[]
         self.grammaire_brute = self.charger_grammaire()
         self.initialiser_regles()
 
@@ -11,8 +13,6 @@ class Grammaire:
 
         self.terminaux = []
         self.non_terminaux = []
-
-        self.keywords=[]
 
         self.identifications_non_terminaux()
 
@@ -50,7 +50,7 @@ class Grammaire:
                 data=[]
                 for element in formatted_data:
                     data = [el.replace(" ","") for el in data + element if ((el!='') and (el!=' '))]
-                self.keywords=data
+                self.keywords=copy.deepcopy(data)
         except:
             sys.stdout.write("Warning: Fichier words.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
             exit()
@@ -70,4 +70,3 @@ class Grammaire:
 	            
 if __name__=="__main__":
 	grammaire = Grammaire()
-	#print(grammaire)
