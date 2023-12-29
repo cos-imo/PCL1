@@ -7,13 +7,17 @@ class Grammaire:
         self.grammaire_brute = self.charger_grammaire()
         self.initialiser_regles()
 
+        self.mots_cles = []
+
         self.terminaux = []
         self.non_terminaux = []
 
+        self.keywords=[]
+
         self.identifications_non_terminaux()
 
-        print(self.terminaux)
-        print(self.non_terminaux)
+        #print(self.terminaux)
+        #print(self.non_terminaux)
 
     def identifications_non_terminaux(self):
         for line in self.manager.ensemble_regles:
@@ -35,15 +39,24 @@ class Grammaire:
             sys.stdout.write("Warning: Fichier input.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
             exit()
 
-    def charger_mots_cles():
+    def charger_mots_cles(self):
         try:
             with open("words.gramm") as file:
                 data=file.readlines()
-            except:
-                sys.stdout.write("Warning: Fichier input.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
-                exit()
+                if "[" in data[0]:
+                    data[0] = data[0].split("[")[1]
+                data = data[:-1]
+                formatted_data = [element.replace("\n","").replace("\"","").replace("'","").replace("  ","").split(",") for element in data]
+                data=[]
+                for element in formatted_data:
+                    data = [el.replace(" ","") for el in data + element if ((el!='') and (el!=' '))]
+                self.keywords=data
+        except:
+            sys.stdout.write("Warning: Fichier words.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
+            exit()
     
     def charger_grammaire(self):
+        self.charger_mots_cles()
         return self.charger_regles()
 
     def initialiser_regles(self):
@@ -57,4 +70,4 @@ class Grammaire:
 	            
 if __name__=="__main__":
 	grammaire = Grammaire()
-	print(grammaire)
+	#print(grammaire)

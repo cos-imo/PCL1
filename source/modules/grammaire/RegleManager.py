@@ -14,7 +14,7 @@ class RegleManager:
 		self.ensemble_regles = []
 		self.initialiser_regles()
 		self.ajouter_premier_terminaux()
-		print(self.premiers_terminaux)
+		#print(self.premiers_terminaux)
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
