@@ -1,9 +1,10 @@
-import Grammaire
 import Regle
+from Grammaire import Grammaire
 
-class RegleManager:
+class RegleManager(Grammaire):
 
 	ensemble_regles = []
+
 
 	def __init__(self, ensemble_de_regles):
 		self.ensemble_raw = ensemble_de_regles
@@ -13,8 +14,7 @@ class RegleManager:
 
 		self.ensemble_regles = []
 		self.initialiser_regles()
-		self.ajouter_premier_terminaux()
-		#print(self.premiers_terminaux)
+		#self.ajouter_premier_terminaux()
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
@@ -25,7 +25,7 @@ class RegleManager:
 			return
 		for regle in self.ensemble_regles:
 			if ((regle.raw_regle) == expression):
-                # Si la règle à déjà ete vue, on renvoie un message (mais on continue l'éxecution)
+                # Si la règle à déjà été vue, on renvoie un message (mais on continue l'éxecution)
 				print("Doublon trouvé: " + expression)
 				return
 			else:
@@ -36,60 +36,58 @@ class RegleManager:
 				self.ensemble_regles = list(set(self.ensemble_regles))
 				return
 	
-	def ajouter_premier_terminaux(self):
-		"""
-        Calcule les premiers de chaque terminal
-        """
-		queue = []
-        #On parcourt les règles
-		for regle in self.ensemble_raw:
-            #On découpe chaque règle
-			partie_droite = regle.split("->")[1][1:].split(" ")
-			partie_gauche = regle.split("->")[0].replace(" ","")
-			if partie_droite[0].islower():
-                # Si le premier élément est en minuscule (il s'agit donc d'un terminal)
-				if partie_gauche not in self.premiers_terminaux:
-                    # Si la liste des premiers associée n'existe pas dans le dictionnaire, on la créée
-					self.premiers_terminaux[partie_gauche] = partie_droite[0]
-				else:
-                    # Sinon, on se contente de l'ajouter à la liste existante
-					self.premiers_terminaux[partie_gauche] += partie_droite[0]
-			else:
-                # Sinon, si le premier élément n'est pas un terminal
-				if partie_droite[0] in self.premiers_terminaux:
-                    # Si les premiers du non-terminal existe:
-					if regle.partie_gauche not in self.premiers_terminaux:
-                        # Si la liste des premiers associée n'existe pas dans le dictionnaire, on l'initialise en ajoutant la liste des premiers du permier non terminal de la partie droite
-						self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
-					else:
-                        # Sinon, on ajoute lesdits premiers à la liste des premiers
-						self.premiers_terminaux[partie_gauche] += self.premiers_terminaux[partie_droite[0]]
-				else:
-                    # Si la liste des premiers n'existe pas, on ajoute la règle à la file d'attente 
-					queue.append(regle)
+	# def ajouter_premier_terminaux(self):
+	# 	"""
+    #     Calcule les premiers de chaque terminal
+    #     """
+	# 	queue = []
+    #     #On parcourt les règles
+	# 	for regle in self.ensemble_raw:
+    #         #On découpe chaque règle
+	# 		partie_droite = regle.split("->")[1][1:].split(" ")
+	# 		partie_gauche = regle.split("->")[0].replace(" ","")
+	# 		if self.est_terminal(partie_droite[0]):
+    #             # Si le premier élément est en minuscule (il s'agit donc d'un terminal)
+	# 			if partie_gauche not in self.premiers_terminaux:
+    #                 # Si la liste des premiers associée n'existe pas dans le dictionnaire, on la créée
+	# 				self.premiers_terminaux[partie_gauche] = partie_droite[0]
+	# 			else:
+    #                 # Sinon, on se contente de l'ajouter à la liste existante
+	# 				self.premiers_terminaux[partie_gauche] += partie_droite[0]
+	# 		else:
+    #             # Sinon, si le premier élément n'est pas un terminal
+	# 			if partie_droite[0] in self.premiers_terminaux:
+    #                 # Si les premiers du non-terminal existe:
+	# 				if regle.partie_gauche not in self.premiers_terminaux:
+    #                     # Si la liste des premiers associée n'existe pas dans le dictionnaire, on l'initialise en ajoutant la liste des premiers du permier non terminal de la partie droite
+	# 					self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
+	# 				else:
+    #                     # Sinon, on ajoute lesdits premiers à la liste des premiers
+	# 					self.premiers_terminaux[partie_gauche] += self.premiers_terminaux[partie_droite[0]]
+	# 			else:
+    #                 # Si la liste des premiers n'existe pas, on ajoute la règle à la file d'attente 
+	# 				queue.append(regle)
 
-		for i in range(len(queue)):
-			for element in queue:
-                # On parcourt les règles et on les découpe
-				partie_droite = element.split("->")[1][1:].split(" ")
-				partie_gauche = element.split("->")[0].replace(" ","")
-				if partie_droite[0] in self.premiers_terminaux:
-                    # Si les premiers ont été calculés, on les ajoute
-					self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
-					queue.remove(element)
+	# 	for i in range(len(queue)):
+	# 		for element in queue:
+    #             # On parcourt les règles et on les découpe
+	# 			partie_droite = element.split("->")[1][1:].split(" ")
+	# 			partie_gauche = element.split("->")[0].replace(" ","")
+	# 			if partie_droite[0] in self.premiers_terminaux:
+    #                 # Si les premiers ont été calculés, on les ajoute
+	# 				self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
+	# 				queue.remove(element)
 
-		for element in queue:
-            # On parcourt une denière fois la liste d'attente
-			partie_droite = element.split("->")[1][1:].split(" ")
-			partie_gauche = element.split("->")[0].replace(" ","")
-			if partie_droite[0] in self.premiers_terminaux:
-				self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
-				queue.remove(element)
-			else:
-                # Si on a finalement rien trouvé, on renvoie un message d'erreur
-				print("Erreur: " + partie_gauche + " n'a pas de premiers.\n Vérifiez votre grammaire.")
-
-			
+	# 	for element in queue:
+    #         # On parcourt une denière fois la liste d'attente
+	# 		partie_droite = element.split("->")[1][1:].split(" ")
+	# 		partie_gauche = element.split("->")[0].replace(" ","")
+	# 		if partie_droite[0] in self.premiers_terminaux:
+	# 			self.premiers_terminaux[partie_gauche] = self.premiers_terminaux[partie_droite[0]]
+	# 			queue.remove(element)
+	# 		else:
+    #             # Si on a finalement rien trouvé, on renvoie un message d'erreur
+	# 			print("Erreur: " + partie_gauche + " n'a pas de premiers.\n Vérifiez votre grammaire.")	
 	
 	def initialiser_regles(self):
 		"""
