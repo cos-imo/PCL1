@@ -1,9 +1,13 @@
 import sys
-import Regle
-import RegleManager
+import modules.grammaire.Regle
+import modules.grammaire.RegleManager
 import copy
 
 class Grammaire:
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 1: Init
+    # ---------------------------------------------------------------------------------------------------------------
     def __init__(self):
         self.keywords=[]
         self.grammaire_brute = self.charger_grammaire()
@@ -16,15 +20,25 @@ class Grammaire:
 
         self.identifications_non_terminaux()
 
-    def identifications_non_terminaux(self):
-        for line in self.manager.ensemble_regles:
-             self.non_terminaux += line.regle_decoupee[0]
-             self.terminaux += line.regle_decoupee[1].split(' ')
-        self.terminaux = [element for element in self.terminaux if element!='' and element not in self.non_terminaux]
-        self.non_terminaux = [element for element in self.non_terminaux if element !=' ']
 
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 2: Chargement
+    # ---------------------------------------------------------------------------------------------------------------
+
+    def charger_grammaire(self):
+        """
+        Cette fonction appelle les différentes fonctions de chargement, en l'occurence
+         * charger_regles()
+        et
+         * charger_mots_cles()
+        """
+        self.charger_mots_cles()
+        return self.charger_regles()
 
     def charger_regles(self):
+        """
+        Cette fonction ouvre le fichier 'rules.gramm' pour charger les règles
+        """
         #on ouvre le fichier
         try:
             with open("rules.gramm","r") as file:
@@ -37,6 +51,9 @@ class Grammaire:
             exit()
 
     def charger_mots_cles(self):
+        """
+        Cette fonction ouvre le fichier words.gramm pour charger les mots-clés
+        """
         try:
             with open("words.gramm") as file:
                 data=file.readlines()
@@ -51,23 +68,45 @@ class Grammaire:
         except:
             sys.stdout.write("Warning: Fichier words.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
             exit()
-    
-    def charger_grammaire(self):
-        self.charger_mots_cles()
-        return self.charger_regles()
 
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 2: Coeur de la grammaire
+    # ---------------------------------------------------------------------------------------------------------------
     def initialiser_regles(self):
         self.manager = RegleManager.RegleManager(self.grammaire_brute)
 
+    def identifications_non_terminaux(self):
+        for line in self.manager.ensemble_regles:
+                self.non_terminaux += line.regle_decoupee[0]
+                self.terminaux += line.regle_decoupee[1].split(' ')
+        self.terminaux = [element for element in self.terminaux if element!='' and element not in self.non_terminaux]
+        self.non_terminaux = [element for element in self.non_terminaux if element !=' ']
+
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 4: Fonctions utilitaires
+    # ---------------------------------------------------------------------------------------------------------------
+
     def __repr__(self):
+        """
+        Cette  fonction définit la présentation de notre objet
+        """
         repr_str = "Grammaire\n\n"
         for regle in self.manager.ensemble_regles:
             repr_str += regle.__repr__()
         return repr_str
 
     def est_terminal(self, element):
+        """
+        Cette fonction permet de tester si un élément est contenu dans la liste des terminaux
+        """
         return (element in self.terminaux)
     
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 4: Fonctions dépréciées/en cours de code
+    # --------------------------------------------------------------------------------------------------------------
+
     # def ajouter_premier_terminaux(self):
 	# 	"""
     #     Calcule les premiers de chaque terminal

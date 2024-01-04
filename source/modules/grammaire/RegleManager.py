@@ -1,11 +1,17 @@
-import Regle
-from Grammaire import Grammaire
+import modules.grammaire.Regle
+from modules.grammaire.Grammaire import Grammaire
 
 class RegleManager(Grammaire):
 
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 0: Définitions des variables globales
+    # ---------------------------------------------------------------------------------------------------------------
 	ensemble_regles = []
 
 
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 1: Init
+    # ---------------------------------------------------------------------------------------------------------------
 	def __init__(self, ensemble_de_regles):
 		self.ensemble_raw = ensemble_de_regles
 
@@ -14,7 +20,6 @@ class RegleManager(Grammaire):
 
 		self.ensemble_regles = []
 		self.initialiser_regles()
-		#self.ajouter_premier_terminaux()
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
