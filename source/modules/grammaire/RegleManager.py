@@ -1,4 +1,4 @@
-import modules.grammaire.Regle
+import modules.grammaire.Regle as Regle
 from modules.grammaire.Grammaire import Grammaire
 
 class RegleManager(Grammaire):
@@ -7,24 +7,28 @@ class RegleManager(Grammaire):
     # Section 0: Définitions des variables globales
     # ---------------------------------------------------------------------------------------------------------------
 	ensemble_regles = []
-
+	
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 1: Init
     # ---------------------------------------------------------------------------------------------------------------
-	def __init__(self, ensemble_de_regles):
+	def __init__(self, ensemble_de_regles, liste_mots):
 		self.ensemble_raw = ensemble_de_regles
 
-		self.premiers_terminaux = {}
+		self.liste_mots = liste_mots
+		self.non_terminaux = []
+		self.terminaux = []
 		self.suivants = {}
 
 		self.ensemble_regles = []
 		self.initialiser_regles()
+		self.set_non_terminaux()
+		self.set_terminaux()
 	
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
             # Si aucune règle n'a encore été initialisée (la liste n'existe donc pas encore), on crée la règle et on l'ajoute
-			regle = Regle.Regle(0, expression, self.premiers_terminaux)
+			regle = Regle.Regle(0, expression)
 			self.ensemble_regles.append(regle)
 			self.ensemble_regles = list(set(self.ensemble_regles))
 			return
@@ -35,11 +39,30 @@ class RegleManager(Grammaire):
 				return
 			else:
                 # Sinon on initialise un objet Regle
-				regle = Regle.Regle(len(self.ensemble_regles), expression, self.premiers_terminaux)
+				regle = Regle.Regle(len(self.ensemble_regles), expression)
                 # Et on l'ajoute en supprimant les doublons
 				self.ensemble_regles.append(regle)
 				self.ensemble_regles = list(set(self.ensemble_regles))
 				return
+	
+	def get_ensemble_regles(self):
+		return self.ensemble_regles
+	
+	def set_non_terminaux(self):
+		for regle in self.ensemble_regles:
+			self.non_terminaux += [regle.get_membre_gauche().replace(' ','')]
+	
+	def get_non_terminaux(self):
+		return self.non_terminaux
+	
+	def set_terminaux(self):
+		for mot in self.liste_mots:
+			if not (mot in self.non_terminaux):
+				self.terminaux += [mot]
+	
+	def get_terminaux(self):
+		return self.terminaux
+
 	
 	# def ajouter_premier_terminaux(self):
 	# 	"""

@@ -18,17 +18,28 @@ class Regle:
 		self.non_terminaux = []
 		self.terminaux = []
 
-		self.regle_brute_decoupee = self.decoupe(self.raw_regle)
+		self.decoupe(self.raw_regle)
 		
 
 	def decoupe(self, regle_brute):
-		return regle_brute.split("->")
+		self.regle_brute_decoupee = regle_brute.split("->")
+		self.decoupe_membre_droit()
+		self.decoupe_membre_gauche()
 
 	def decoupe_membre_droit(self):
-		self.membre_droit = self.regle_brute_decoupee[1]
+		self.membre_droit = self.regle_brute_decoupee[1].split(" ")
 
 	def decoupe_membre_gauche(self):
 		self.membre_gauche = self.regle_brute_decoupee[0]
+
+	def get_membre_gauche(self):
+		return self.membre_gauche
+	
+	def get_membre_droit(self):
+		return self.membre_droit
 				
 	def __repr__(self):
-		return "Regle\n\n\tExpresion: " + self.raw_regle
+		membre_droit_str = ""
+		for element in self.membre_droit:
+			membre_droit_str += element + " "
+		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\t\tMembre gauche: " + self.membre_gauche + "\n\t\tMembre droit: " + membre_droit_str
