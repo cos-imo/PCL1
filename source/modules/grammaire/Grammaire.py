@@ -1,6 +1,6 @@
 import sys
-import modules.grammaire.Regle
-import modules.grammaire.RegleManager
+import modules.grammaire.Regle as Regle
+import modules.grammaire.RegleManager as RegleManager
 import copy
 
 class Grammaire:
@@ -14,11 +14,10 @@ class Grammaire:
         self.initialiser_regles()
 
         self.mots_cles = []
+        self.liste_mots = []
 
-        self.terminaux = []
-        self.non_terminaux = []
-
-        self.identifications_non_terminaux()
+        # self.terminaux = []
+        # self.non_terminaux = []
 
 
     # ---------------------------------------------------------------------------------------------------------------
@@ -74,14 +73,18 @@ class Grammaire:
     # Section 2: Coeur de la grammaire
     # ---------------------------------------------------------------------------------------------------------------
     def initialiser_regles(self):
-        self.manager = RegleManager.RegleManager(self.grammaire_brute)
+        self.charger_mots()
+        self.manager = RegleManager.RegleManager(self.grammaire_brute, self.liste_mots)
 
-    def identifications_non_terminaux(self):
-        for line in self.manager.ensemble_regles:
-                self.non_terminaux += line.regle_decoupee[0]
-                self.terminaux += line.regle_decoupee[1].split(' ')
-        self.terminaux = [element for element in self.terminaux if element!='' and element not in self.non_terminaux]
-        self.non_terminaux = [element for element in self.non_terminaux if element !=' ']
+    def charger_mots(self):
+        """
+        Cette fonction charge tout les mots du fichier grammaire. On pourra ensuite s'en servir, par exemple pour identifier les terminaux et les non terminaux
+        """
+        lst_temp = [element.replace("-> ","") for element in self.grammaire_brute]
+        self.liste_mots = []
+        for line in lst_temp:
+            self.liste_mots += [element for element in line.split(" ")]
+        self.liste_mots = list(set(self.liste_mots))
 
 
     # ---------------------------------------------------------------------------------------------------------------
