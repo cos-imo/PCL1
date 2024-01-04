@@ -25,6 +25,10 @@ class Regle:
 		self.init_premier()
 		
 
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 2: Fonctions utilitaires
+    # ---------------------------------------------------------------------------------------------------------------
+		
 	def decoupe(self, regle_brute):
 		self.regle_brute_decoupee = regle_brute.split("->")
 		self.decoupe_membre_droit()
@@ -35,6 +39,11 @@ class Regle:
 
 	def decoupe_membre_gauche(self):
 		self.membre_gauche = self.regle_brute_decoupee[0]
+
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 3: Fonctions utilitaires: Getter et Setter
+    # ---------------------------------------------------------------------------------------------------------------
 
 	def get_membre_gauche(self):
 		return self.membre_gauche
@@ -47,6 +56,11 @@ class Regle:
 
 	def init_premier(self):
 		self.premier = self.membre_droit[0]
+
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 4: Fonctions utilitaires: Représentation
+    # ---------------------------------------------------------------------------------------------------------------
 				
 	def __repr__(self):
 		membre_droit_str = ""

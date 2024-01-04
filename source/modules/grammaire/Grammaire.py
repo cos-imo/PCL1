@@ -117,7 +117,7 @@ class Grammaire:
         print(self)
     
     # ---------------------------------------------------------------------------------------------------------------
-    # Section 4: Fonctions dépréciées/en cours de code
+    # Section 5: Fonctions liées au premiers
     # --------------------------------------------------------------------------------------------------------------
 
     def ajouter_premier_terminaux(self):

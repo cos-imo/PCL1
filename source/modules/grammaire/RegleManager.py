@@ -25,6 +25,11 @@ class RegleManager(Grammaire):
 		self.set_non_terminaux()
 		self.set_terminaux()
 	
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 2: Management des règles
+    # ---------------------------------------------------------------------------------------------------------------
+		
 	def ajouter_regle(self, expression):
 		if self.ensemble_regles == []:
             # Si aucune règle n'a encore été initialisée (la liste n'existe donc pas encore), on crée la règle et on l'ajoute
@@ -44,6 +49,17 @@ class RegleManager(Grammaire):
 				self.ensemble_regles.append(regle)
 				self.ensemble_regles = list(set(self.ensemble_regles))
 				return
+			
+	def initialiser_regles(self):
+		"""
+        Appelle self.ajoute_regle pour chaque règle contenue dans le fichier
+        """
+		for regle in self.ensemble_raw:
+			self.ajouter_regle(regle)
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 3: Fonctions utilitaires: Getter et Setter
+    # ---------------------------------------------------------------------------------------------------------------
 	
 	def get_ensemble_regles(self):
 		return self.ensemble_regles
@@ -62,10 +78,3 @@ class RegleManager(Grammaire):
 	
 	def get_terminaux(self):
 		return self.terminaux
-	
-	def initialiser_regles(self):
-		"""
-        Appelle self.ajoute_regle pour chaque règle contenue dans le fichier
-        """
-		for regle in self.ensemble_raw:
-			self.ajouter_regle(regle)
