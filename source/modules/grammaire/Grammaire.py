@@ -33,8 +33,6 @@ class Grammaire:
         self.set_premiers_regle()
         self.calcul_suivants()
 
-        print(self.suivants)
-
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
     # ---------------------------------------------------------------------------------------------------------------
@@ -207,8 +205,35 @@ class Grammaire:
                 self.suivants[element] += suivants
             else:
                 self.suivants[element] += [suivants]
-        
 
+    def calcul_suivants(self):
+        """
+        Calcule l'ensemble des suivants
+        """
+        queue=[]
+        for regle in self.manager.ensemble_regles:
+            for i in range(len(regle.membre_droit)-1):
+                if regle.membre_droit[i+1] in self.terminaux:
+                    self.ajouter_suivants(regle.membre_droit[i], regle.membre_droit[i+1])
+                elif regle.membre_droit[i+1] in self.suivants:
+                    self.ajouter_suivants(regle.membre_droit[i], self.premiers_terminaux[regle.membre_droit[i+1]])
+                else:
+                    queue.append((regle.membre_droit[i], regle.membre_droit[i+1]))
+                    string = ""
+                    for element in queue:
+                        string += '(' + element[0] + ',' + element[1] + '),'
+                    print("Erreur : " + string)
+            if regle.membre_gauche in self.suivants:
+                self.ajouter_suivants(regle.membre_droit[-1], self.suivants[regle.membre_gauche.replace(" ","")])
+            else:
+                queue.append((regle.membre_droit[-1], regle.membre_gauche.replace(" ","")))
+        for j in range(len(queue)):
+            for (element_a_ajouter, suivants_a_ajouter) in queue:
+                if suivants_a_ajouter in self.suivants:
+                    self.ajouter_suivants(element_a_ajouter, self.suivants[suivants_a_ajouter])
+        for element in self.suivants:
+            self.suivants[element] = list(set(self.suivants[element]))
+        self.ajouter_suivants(self.axiome, ['$'])
 
 if __name__=="__main__":
     grammaire = Grammaire()
