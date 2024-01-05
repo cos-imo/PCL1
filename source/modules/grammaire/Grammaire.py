@@ -1,6 +1,6 @@
 import sys
-import modules.grammaire.Regle as Regle
-import modules.grammaire.RegleManager as RegleManager
+import Regle
+import RegleManager
 import copy
 
 class Grammaire:
@@ -9,6 +9,9 @@ class Grammaire:
     # Section 1: Init
     # ---------------------------------------------------------------------------------------------------------------
     def __init__(self):
+
+        self.axiome = None
+
         self.keywords=[]
         self.grammaire_brute = self.charger_grammaire()
         self.initialiser_regles()
@@ -24,8 +27,13 @@ class Grammaire:
 
         self.premiers_terminaux = {}
 
+        self.suivants = {}
+
         self.ajouter_premier_terminaux()
         self.set_premiers_regle()
+        self.calcul_suivants()
+
+        print(self.suivants)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
@@ -51,6 +59,7 @@ class Grammaire:
                 data = file.readlines()
                 # On lit les données et on retourne la grammaire
                 self.grammaire_brute = [element.replace("\n","") for element in data]
+                self.axiome = self.grammaire_brute[0].split(" ->")[0]
                 return self.grammaire_brute
         except:
             sys.stdout.write("Warning: Fichier input.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
@@ -166,6 +175,9 @@ class Grammaire:
                 print("Erreur: " + regle.membre_gauche + " n'a pas de premiers.\n Vérifiez votre grammaire.")
 
     def set_premiers_regle(self):
+        """
+        Calcule le premier de chaque règle
+        """
         for regle in self.manager.ensemble_regles:
             if regle.membre_droit[0] in self.terminaux:
                 regle.set_premier_regle(regle.premier)
@@ -177,6 +189,25 @@ class Grammaire:
                 print(self.premiers_terminaux)
                 exit()
 	
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 6: Fonctions liées aux suivants
+    # ---------------------------------------------------------------------------------------------------------------
+                
+    def ajouter_suivants(self, element, suivants):
+        """
+        Ajoute les suivants donnés en argument au dictionnaire
+        """
+        if not (element in self.suivants):
+            if isinstance(suivants, list):
+                self.suivants[element] = suivants
+            else:
+                self.suivants[element] = [suivants]
+        else:
+            if isinstance(suivants, list):
+                self.suivants[element] += suivants
+            else:
+                self.suivants[element] += [suivants]
+        
 
 
 if __name__=="__main__":
