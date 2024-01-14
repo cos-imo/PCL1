@@ -93,7 +93,7 @@ class Automate:
         code +=  '_'
 
         # création du message d'erreur
-        message_erreur = f"Erreur à la ligne  {ligne}  : { type_erreur } : {cara} \n {code} \n{(len(code) - 1)*' '}'^'"
+        message_erreur = f"\033[91mErreur à la ligne  {ligne}\033[0m  : { type_erreur } : {cara} \n {code} \n{(len(code) - 1)*' '}'^'"
         return message_erreur
 
 
