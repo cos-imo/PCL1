@@ -1,4 +1,4 @@
-from modules.grammaire.Regle import Regle
+import Regle
 
 class testRegle:
 
