@@ -42,7 +42,7 @@ VENV_DIR="$(cd "$(dirname "$BASH_SOURCE")" && pwd)"
 export VENV_DIR
 
 _OLD_PYTHON_PATH="$PYTHONPATH"
-PYTHONPATH="$VENV_DIR:$VENV_DIR/modules/analyse_lexicale:$VENV_DIR/modules"
+PYTHONPATH="$VENV_DIR:$VENV_DIR/modules/analyse_lexicale:$VENV_DIR/modules:$VENV_DIR/modules/grammaire"
 export PYTHONPATH
 
 _OLD_VIRTUAL_PATH="$PATH"

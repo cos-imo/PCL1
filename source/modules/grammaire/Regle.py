@@ -1,6 +1,6 @@
 import sys
 import math
-import RegleManager
+import modules.grammaire.RegleManager
 
 class Regle:
 

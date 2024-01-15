@@ -1,6 +1,6 @@
 import sys
-import Regle
-import RegleManager
+import modules.grammaire.Regle as Regle
+import modules.grammaire.RegleManager as RegleManager
 import copy
 
 class Grammaire:
@@ -69,7 +69,7 @@ class Grammaire:
         """
         #on ouvre le fichier
         try:
-            with open("rules.gramm","r") as file:
+            with open("modules/grammaire/rules.gramm","r") as file:
                 data = file.readlines()
                 # On lit les données et on retourne la grammaire
                 self.grammaire_brute = [element.replace("\n","") for element in data]
@@ -84,7 +84,7 @@ class Grammaire:
         Cette fonction ouvre le fichier words.gramm pour charger les mots-clés
         """
         try:
-            with open("words.gramm") as file:
+            with open("modules/grammaire/words.gramm") as file:
                 data=file.readlines()
                 if "[" in data[0]:
                     data[0] = data[0].split("[")[1]
@@ -119,9 +119,9 @@ class Grammaire:
     def setRegleByPremier(self):
         for regle in self.manager.ensemble_regles:
             if regle.membre_gauche not in self.regle_by_premier:
-                self.regle_by_premier[regle.membre_gauche] = [regle]
+                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]] = [regle]
             else:
-                self.regle_by_premier[regle.membre_gauche].append(regle)
+                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]].append(regle)
 
     def setSuscribers(self):
         for regle in self.manager.ensemble_regles:
