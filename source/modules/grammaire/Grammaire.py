@@ -1,6 +1,6 @@
 import sys
-import Regle
-import RegleManager
+import modules.grammaire.Regle as Regle
+import modules.grammaire.RegleManager as RegleManager
 import copy
 
 class Grammaire:
@@ -33,6 +33,7 @@ class Grammaire:
 
         self.suivants = {}
 
+        self.ident = ["\n","+", "-", "*","/",":=","IDENT","cte","access", "and", "begin", "else", "elsif", "end","false", "for", "function", "if", "in", "is","loop", "new", "not", "null", "or", "out","procedure", "record", "rem", "return", "reverse", "then","true", "type", "use", "while", "with","]",":","(",")",",",";","=",".","'",">","<","str"]
 
         self.setRegleByPremier()
         #print(self.regle_by_premier)
@@ -43,8 +44,10 @@ class Grammaire:
         self.setSuscribers()
         self.ajouter_premier_terminaux()
         # self.set_premiers_regle()
-        # self.calcul_suivants()
+        #self.calcul_suivants()
+        self.premierToInt()
         print(self.premiers_non_terminaux)
+        #print(self.suivants)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
@@ -66,7 +69,7 @@ class Grammaire:
         """
         #on ouvre le fichier
         try:
-            with open("rules.gramm","r") as file:
+            with open("modules/grammaire/rules.gramm","r") as file:
                 data = file.readlines()
                 # On lit les données et on retourne la grammaire
                 self.grammaire_brute = [element.replace("\n","") for element in data]
@@ -81,7 +84,7 @@ class Grammaire:
         Cette fonction ouvre le fichier words.gramm pour charger les mots-clés
         """
         try:
-            with open("words.gramm") as file:
+            with open("modules/grammaire/words.gramm") as file:
                 data=file.readlines()
                 if "[" in data[0]:
                     data[0] = data[0].split("[")[1]
@@ -116,9 +119,9 @@ class Grammaire:
     def setRegleByPremier(self):
         for regle in self.manager.ensemble_regles:
             if regle.membre_gauche not in self.regle_by_premier:
-                self.regle_by_premier[regle.membre_gauche] = [regle]
+                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]] = [regle]
             else:
-                self.regle_by_premier[regle.membre_gauche].append(regle)
+                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]].append(regle)
 
     def setSuscribers(self):
         for regle in self.manager.ensemble_regles:
@@ -236,7 +239,10 @@ class Grammaire:
         for element in self.suivants:
             self.suivants[element] = list(set(self.suivants[element]))
         self.ajouter_suivants(self.axiome, ['$'])
-
+    
+    def premierToInt(self):
+        for entry in self.premiers_non_terminaux:
+            self.premiers_non_terminaux[entry] = [self.ident.index(element) for element in self.premiers_non_terminaux[entry]]
 if __name__=="__main__":
     grammaire = Grammaire()
     #grammaire.affiche()
