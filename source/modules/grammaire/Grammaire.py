@@ -33,6 +33,7 @@ class Grammaire:
 
         self.suivants = {}
 
+        self.ident = ["\n","+", "-", "*","/",":=","IDENT","cte","access", "and", "begin", "else", "elsif", "end","false", "for", "function", "if", "in", "is","loop", "new", "not", "null", "or", "out","procedure", "record", "rem", "return", "reverse", "then","true", "type", "use", "while", "with","]",":","(",")",",",";","=",".","'",">","<","str"]
 
         self.setRegleByPremier()
         #print(self.regle_by_premier)
@@ -43,8 +44,10 @@ class Grammaire:
         self.setSuscribers()
         self.ajouter_premier_terminaux()
         # self.set_premiers_regle()
-        # self.calcul_suivants()
+        #self.calcul_suivants()
+        self.premierToInt()
         print(self.premiers_non_terminaux)
+        #print(self.suivants)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
@@ -236,7 +239,10 @@ class Grammaire:
         for element in self.suivants:
             self.suivants[element] = list(set(self.suivants[element]))
         self.ajouter_suivants(self.axiome, ['$'])
-
+    
+    def premierToInt(self):
+        for entry in self.premiers_non_terminaux:
+            self.premiers_non_terminaux[entry] = [self.ident.index(element) for element in self.premiers_non_terminaux[entry]]
 if __name__=="__main__":
     grammaire = Grammaire()
     #grammaire.affiche()

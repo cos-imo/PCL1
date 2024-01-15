@@ -1,7 +1,7 @@
 import Regle
 import Grammaire
 
-class RegleManager():
+class RegleManager:
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 0: Définitions des variables globales
