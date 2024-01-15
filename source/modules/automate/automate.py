@@ -100,13 +100,15 @@ class Automate:
 
     def est_accepte(self, code):
         """
-        ->param code : code à compiler
+        ->param code : code à compiler, chemin d'accès au fichier
 
         ->return : list_token, 
                     numéro de ligne de fin de lecture ( permet de retourner la ligne ou il 
         y a une erreur si il y en a une)
                     True ou false suivant la réussite ou non de la lecture complète du code
         """
+        
+
         token_courant = ''
         ind_cara_lu   = 0
         ligne         = 1
@@ -336,10 +338,14 @@ class Automate:
         ecrire_code_reconstruit(self, adresse_txt)
 
 
+
 def main(fichier):
     automate = Automate()
 
-    code_compi = automate.est_accepte(fichier)
+    with open(fichier, 'r') as file:
+        code = file.read()
+
+    code_compi = automate.est_accepte(code)
     print('\n')
     print(f'{automate.table_const = }')
     print('\n')
@@ -356,4 +362,8 @@ def main(fichier):
         ###
     """
 
-    reconstruit = automate.reconstruction("output/fichier_reconstruit.txt")
+    reconstruit = automate.reconstruction("fichier_reconstruit.txt")
+
+
+if __name__ == "__main__":
+    main("exemple_ada_.txt")
