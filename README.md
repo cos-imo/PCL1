@@ -45,7 +45,7 @@ pip install Compilateur-canAda-Zhou-Lo-Morel-Ungaro
 
 
 ##La structure globale du projet
-/
+```bash
 ├── ajouterarbre.zip
 ├── documents
 │   ├── Cahier des charges
@@ -131,5 +131,5 @@ pip install Compilateur-canAda-Zhou-Lo-Morel-Ungaro
         ├── exemple_ada_2.txt
         ├── exemple_ada_.txt
         └── testLexer.py
-
+```
 ATTENTION il s'agit ici d'une version non mise à jour du code (obsolète)
