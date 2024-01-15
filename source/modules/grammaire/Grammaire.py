@@ -25,13 +25,26 @@ class Grammaire:
         self.terminaux = self.manager.get_terminaux()
         self.non_terminaux = self.manager.get_non_terminaux()
 
-        self.premiers_terminaux = {}
+        self.premiers_non_terminaux = {}
+        self.premiers_globaux = {}
+
+        #Dictionnaire permettant de retrouver une règle depuis le premier élément de son membre droit
+        self.regle_by_premier = {}
 
         self.suivants = {}
 
+
+        self.setRegleByPremier()
+        #print(self.regle_by_premier)
+        # self.setPremierNonTerminaux()
+        # self.ajouter_premier_terminaux()
+        #self.setObservers()
+        
+        self.setSuscribers()
         self.ajouter_premier_terminaux()
-        self.set_premiers_regle()
-        self.calcul_suivants()
+        # self.set_premiers_regle()
+        # self.calcul_suivants()
+        print(self.premiers_non_terminaux)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
@@ -88,7 +101,7 @@ class Grammaire:
     # ---------------------------------------------------------------------------------------------------------------
     def initialiser_regles(self):
         self.charger_mots()
-        self.manager = RegleManager.RegleManager(self.grammaire_brute, self.liste_mots)
+        self.manager = RegleManager.RegleManager(self.grammaire_brute, self.liste_mots, self)
 
     def charger_mots(self):
         """
@@ -100,6 +113,20 @@ class Grammaire:
             self.liste_mots += [element for element in line.split(" ")]
         self.liste_mots = list(set(self.liste_mots))
 
+    def setRegleByPremier(self):
+        for regle in self.manager.ensemble_regles:
+            if regle.membre_gauche not in self.regle_by_premier:
+                self.regle_by_premier[regle.membre_gauche] = [regle]
+            else:
+                self.regle_by_premier[regle.membre_gauche].append(regle)
+
+    def setSuscribers(self):
+        for regle in self.manager.ensemble_regles:
+            if regle.membre_droit[0] not in self.non_terminaux:
+                pass
+            else:
+                for regle_sus in self.regle_by_premier[regle.membre_droit[0]]:
+                    regle_sus.addSuscriber(regle)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 4: Fonctions utilitaires
@@ -127,65 +154,40 @@ class Grammaire:
     # Section 5: Fonctions liées au premiers
     # ---------------------------------------------------------------------------------------------------------------
 
+    def setObservers(self):
+        for regle in self.manager.ensemble_regles:
+            if regle.membre_droit[0] in self.non_terminaux:
+                for regle_premier in self.regle_by_premier[regle.membre_droit[0]]:
+                    regle_premier.addSuscriber(regle)
+
     def ajouter_premier_terminaux(self):
         """
         Calcule les premiers de chaque terminal
         """
-        queue = []
         #On parcourt les règles
         for regle in self.manager.ensemble_regles:
-            if self.est_terminal(regle.premier):
-                # Si le premier élément est un terminal
-                if regle.membre_gauche not in self.premiers_terminaux:
-                    # Si la liste des premiers associée n'existe pas dans le dictionnaire, on la créée
-                    self.premiers_terminaux[regle.membre_gauche.replace(" ","")] = regle.premier
+            if self.est_terminal(regle.membre_droit[0]):
+                regle.set_premier_regle(regle.membre_droit[0])
+                regle.notifySuscribers(regle.membre_droit[0])
+                if regle.membre_gauche in self.premiers_non_terminaux:
+                    self.premiers_non_terminaux[regle.membre_gauche].append(regle.membre_droit[0])
                 else:
-                    # Sinon, on se contente de l'ajouter à la liste existante
-                    self.premiers_terminaux[regle.membre_gauche.replace(" ","")] += regle.premier
-            else:
-                # Sinon, si le premier élément n'est pas un terminal
-                if regle.premier in self.premiers_terminaux:
-                    # Si les premiers du non-terminal existe:
-                    if regle.membre_gauche not in self.premiers_terminaux:
-                        # Si la liste des premiers associée n'existe pas dans le dictionnaire, on l'initialise en ajoutant la liste des premiers du permier non terminal de la partie droite
-                        self.premiers_terminaux[regle.membre_gauche.replace(" ","")] = self.premiers_terminaux[regle.premier]
-                    else:
-                        # Sinon, on ajoute lesdits premiers à la liste des premiers
-                        self.premiers_terminaux[regle.membre_gauche.replace(" ","")] += self.premiers_terminaux[regle.premier]
-                else:
-                    # Si la liste des premiers n'existe pas, on ajoute la règle à la file d'attente 
-                    queue.append(regle)
+                    self.premiers_non_terminaux[regle.membre_gauche] = [regle.membre_droit[0]]
 
-        for i in range(len(queue)):
-            for regle in queue:
-                if regle.premier in self.premiers_terminaux:
-                    # Si les premiers ont été calculés, on les ajoute
-                    self.premiers_terminaux[regle.membre_gauche.replace(" ","")] = self.premiers_terminaux[regle.premier]
-                    queue.remove(regle)
-                    
-        for regle in queue:
-            # On parcourt une denière fois la liste d'attente
-            if regle.premier in self.premiers_terminaux:
-                self.premiers_terminaux[regle.membre_gauche.replace(" ","")] = self.premiers_terminaux[regle.premier]
-                queue.remove(regle)
-            else:
-                # Si on a finalement rien trouvé, on renvoie un message d'erreur
-                print("Erreur: " + regle.membre_gauche + " n'a pas de premiers.\n Vérifiez votre grammaire.")
-
-    def set_premiers_regle(self):
-        """
-        Calcule le premier de chaque règle
-        """
-        for regle in self.manager.ensemble_regles:
-            if regle.membre_droit[0] in self.terminaux:
-                regle.set_premier_regle(regle.premier)
-            elif regle.membre_droit[0] in self.premiers_terminaux:
-                regle.set_premier_regle(self.premiers_terminaux[regle.premier])
-            else:
-                print("Erreur: premier non trouvé: ")
-                print(regle.membre_droit[0])
-                print(self.premiers_terminaux)
-                exit()
+    # def ajouter_premier(self, premier, non_terminal):
+    #     if non_terminal not in self.premiers_non_terminaux:
+    #         self.premiers_non_terminaux[non_terminal] = [premier]
+    #     else:
+    #         self.premiers_non_terminaux[non_terminal] += premier
+    
+    # def setPremierNonTerminaux(self):
+    #     for regle in self.manager.ensemble_regles:
+    #         if regle.membre_gauche not in self.premiers_non_terminaux:
+    #             self.premiers_non_terminaux[regle.membre_gauche] = regle.premier
+    #         else:
+    #             for premier in regle.premier:
+    #                 self.premiers_non_terminaux[regle.membre_gauche].append(premier)
+    #                 self.premiers_non_terminaux[regle.membre_gauche] = list(set(self.premiers_non_terminaux[regle.membre_gauche]))
 	
     # ---------------------------------------------------------------------------------------------------------------
     # Section 6: Fonctions liées aux suivants
@@ -237,4 +239,4 @@ class Grammaire:
 
 if __name__=="__main__":
     grammaire = Grammaire()
-    grammaire.affiche()
+    #grammaire.affiche()

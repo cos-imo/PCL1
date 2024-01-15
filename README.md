@@ -1,5 +1,9 @@
 # Projet Compilation
 
+![Static Badge](https://img.shields.io/badge/Télécom-Projet_scolaire-purple)
+![Static Badge](https://img.shields.io/badge/Langage-Python-yellow)
+![Static Badge](https://img.shields.io/badge/Arbre-GraphViz-blue)
+
 ## Sommaire
 
 0. [Sommaire](#Sommaire)
