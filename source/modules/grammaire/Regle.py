@@ -1,6 +1,6 @@
 import sys
 import math
-import modules.grammaire.RegleManager
+import RegleManager
 
 class Regle:
 
@@ -38,7 +38,7 @@ class Regle:
 		self.membre_droit = [element for element in self.regle_brute_decoupee[1].split(" ") if element!='']
 
 	def decoupe_membre_gauche(self):
-		self.membre_gauche = self.regle_brute_decoupee[0]
+		self.membre_gauche = self.regle_brute_decoupee[0][:-1]
 
 
     # ---------------------------------------------------------------------------------------------------------------
