@@ -46,7 +46,6 @@ pip install Compilateur-canAda-Zhou-Lo-Morel-Ungaro
 
 ##La structure globale du projet
 ```bash
-├── ajouterarbre.zip
 ├── documents
 │   ├── Cahier des charges
 │   │   ├── biblio.bib
