@@ -42,4 +42,93 @@ Afin de permettre la distribution du code, l'application python est exportée su
 ```
 pip install Compilateur-canAda-Zhou-Lo-Morel-Ungaro
 ```
+
+
+## La structure globale du projet
+```bash
+├── documents
+│   ├── Cahier des charges
+│   │   ├── biblio.bib
+│   │   ├── LICENSE
+│   │   ├── main.tex
+│   │   ├── Projet Compilation - Cahier des charges.pdf
+│   │   └── README.md
+│   ├── codage_des_lexiques.txt
+│   ├── doc
+│   │   ├── module.md
+│   │   ├── PatchNotes.md
+│   │   └── Structure.md
+│   ├── doc.md
+│   ├── Outils de gestion de projet
+│   │   └── Gantt.xlsx
+│   └── Supports pédagogiques
+│       ├── Ada A Crash Course.pdf
+│       ├── Documentation ARM.pdf
+│       ├── Langage Ada LIRMM.pdf
+│       └── Sujet.pdf
+├── README.md
+└── source
+    ├── Banque_de_tests
+    │   ├── exemple_ada_.txt
+    │   ├── Grammaire
+    │   │   └── testRegle.py
+    │   ├── Programme1.txt
+    │   ├── Programme2.txt
+    │   ├── Programme3.txt
+    │   └── Programme4.txt
+    ├── grammaire
+    │   └── __pycache__
+    │       ├── Grammaire.cpython-310.pyc
+    │       ├── Regle.cpython-310.pyc
+    │       └── RegleManager.cpython-310.pyc
+    ├── main.py
+    ├── modules
+    │   ├── analyse_lexicale
+    │   │   ├── error_handler
+    │   │   │   ├── errorhandler.py
+    │   │   │   └── __init__.py
+    │   │   ├── token_analyser
+    │   │   │   ├── __init__.py
+    │   │   │   └── token_analyser.py
+    │   │   └── token_generator
+    │   │       ├── __init__.py
+    │   │       └── token_generator.py
+    │   ├── arbre
+    │   │   └── arbre.py
+    │   ├── arguments
+    │   │   ├── arguments.py
+    │   │   └── __init__.py
+    │   ├── automate
+    │   │   ├── automate.py
+    │   │   ├── fichier_reconstruit.txt
+    │   │   └── __init__.py
+    │   ├── export
+    │   │   ├── data_exporter.py
+    │   │   └── __init__.py
+    │   ├── grammaire
+    │   │   ├── arbretest.py
+    │   │   ├── Grammaire.py
+    │   │   ├── output
+    │   │   │   ├── arbre_abstrait.gv
+    │   │   │   └── arbre_abstrait.gv.pdf
+    │   │   ├── __pycache__
+    │   │   │   ├── Grammaire.cpython-310.pyc
+    │   │   │   ├── Regle.cpython-310.pyc
+    │   │   │   └── RegleManager.cpython-310.pyc
+    │   │   ├── RegleManager.py
+    │   │   ├── Regle.py
+    │   │   ├── rules.gramm
+    │   │   └── words.gramm
+    │   └── test_graph
+    │       ├── gr.py
+    │       ├── hello.gv
+    │       └── hello.gv.pdf
+    ├── output
+    │   └── fichier_reconstruit.txt
+    ├── setup.py
+    └── tests
+        ├── exemple_ada_2.txt
+        ├── exemple_ada_.txt
+        └── testLexer.py
+```
 ATTENTION il s'agit ici d'une version non mise à jour du code (obsolète)
