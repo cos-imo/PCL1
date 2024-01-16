@@ -3,6 +3,7 @@ import modules.grammaire.Regle as Regle
 import modules.grammaire.RegleManager as RegleManager
 from automate import *
 import copy
+from graphviz import Digraph
 
 class Grammaire:
 
@@ -260,4 +261,3 @@ class Grammaire:
 
 if __name__=="__main__":
     grammaire = Grammaire()
-    #grammaire.affiche()
