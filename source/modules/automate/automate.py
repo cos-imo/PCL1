@@ -359,7 +359,7 @@ def main(fichier):
     # with open(fichier, 'r') as file:
     #     code = file.read()
 
-    automate.est_accepte(code)
+    automate.est_accepte(fichier)
     print('\n')
     print(f'{automate.table_const = }')
     print('\n')
@@ -380,7 +380,7 @@ def main(fichier):
 
     reconstruit = automate.reconstruction("fichier_reconstruit.txt")
 
-    return code_compi
+    return automate
 
 
 if __name__ == "__main__":

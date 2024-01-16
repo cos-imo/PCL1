@@ -20,15 +20,25 @@ def main():
     grammaire = Grammaire.Grammaire()
 
     automate = Automate()
+    automate.est_accepte(fichier)
 
     liste_token = automate.liste_token
 
-    current_regle = grammaire.axiome
+    positionStream = 0
 
-    # for token in liste_token:
-    #     if token in 
+    currentRule = grammaire.axiomeRegle
 
-    #print(grammaire.premiers_non_terminaux)
+    Rules = []
+    
+    while positionStream < len(liste_token):
+        positionRule = 0
+        while currentRule.RegleInt[positionRule] == liste_token[positionStream]:
+            positionRule += 1
+            positionStream += 1
+        Rules.append(currentRule)
+        currentRule = grammaire.regle_by_premier[liste_token[positionStream]]
+    
+    #print(Rules)
 
 if __name__=="__main__":
     main()

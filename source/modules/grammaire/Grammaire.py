@@ -261,11 +261,13 @@ class Grammaire:
     def RegleToInt(self):
         for regle in self.manager.ensemble_regles:
             automate = Automate()
-            regleInt = automate.est_accepte(regle.raw_regle)
-            regle.setRegleInt(regleInt[0][2:])
+            automate.est_accepte(regle.raw_regle)
+            regleInt = automate.liste_token
+            regle.setRegleInt(regleInt[3:])
             if regle.raw_regle.split(" ")[0] == "FICHIER":
                 self.axiomeInt = regle.RegleInt
                 self.axiomeRegle = regle
+                print(regle)
 
     def PremierDico(self):
         for regle in self.manager.ensemble_regles:
@@ -278,9 +280,10 @@ class Grammaire:
     def premiersDicoToInt(self):
         for key, value in list(self.premiersDico.items()):
             automate = Automate()
-            new_key = (automate.est_accepte(key))
+            automate.est_accepte(key)
+            new_key = automate.liste_token
             del self.premiersDico[key]
-            self.premiersDico[new_key[0][0]] = value
+            self.premiersDico[new_key[0]] = value
 
 if __name__=="__main__":
     grammaire = Grammaire()
