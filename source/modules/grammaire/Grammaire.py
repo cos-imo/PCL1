@@ -250,7 +250,8 @@ class Grammaire:
     
     def premierToInt(self):
         for entry in self.premiers_non_terminaux:
-            self.premiers_non_terminaux[entry] = [self.ident.index(element) for element in self.premiers_non_terminaux[entry]]
+            automate = Automate()
+            self.premiers_non_terminaux[entry] = [automate.est_accepte(element) for element in self.premiers_non_terminaux[entry]]
 
     def RegleToInt(self):
         for regle in self.manager.ensemble_regles:
