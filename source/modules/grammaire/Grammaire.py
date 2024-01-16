@@ -51,11 +51,12 @@ class Grammaire:
         #self.clearPremiers()
 
 
+        # self.set_premiers_regle()
+        #self.calcul_suivants()
         self.premiersDico = {}
 
         self.PremierDico()
-        # self.set_premiers_regle()
-        #self.calcul_suivants()
+        self.premiersDicoToInt()
         self.premierToInt()
         # print(self.premiers_non_terminaux)
         self.RegleToInt()
@@ -273,6 +274,13 @@ class Grammaire:
                     self.premiersDico[element] = [regle]
                 else:
                     self.premiersDico[element].append(regle)
-                    
+
+    def premiersDicoToInt(self):
+        for key, value in list(self.premiersDico.items()):
+            automate = Automate()
+            new_key = (automate.est_accepte(key))
+            del self.premiersDico[key]
+            self.premiersDico[new_key[0][0]] = value
+
 if __name__=="__main__":
     grammaire = Grammaire()
