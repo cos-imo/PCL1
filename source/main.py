@@ -4,6 +4,7 @@ from export import *
 from token_analyser import *
 from token_generator import *
 from error_handler import *
+from grammaire import *
 import sys, os
 
 parser=Parser()
@@ -30,4 +31,16 @@ if parser.args.create_dump:
    exporter.create_dump_file(token_list, dump_mode)
 """
 
-main(data)
+res = main(data)
+
+print(res)
+
+grammaire = Grammaire.Grammaire()
+
+print(grammaire.premiersDico)
+
+axiome = grammaire.axiomeRegle.RegleInt[1:]
+
+currentRule = axiome
+
+print(axiome)

@@ -24,6 +24,8 @@ class Regle:
 		self.premier = None
 		self.suscribers = []
 
+		self.RegleInt = None
+
 		self.decoupe(self.raw_regle)
 
 		self.init_premier()
@@ -108,3 +110,10 @@ class Regle:
 		
 	def setGrammaire(self, grammaire):
 		self.grammaire = grammaire
+
+    # ---------------------------------------------------------------------------------------------------------------
+    # Section 7: Transformation des terminaux en entiers
+    # ---------------------------------------------------------------------------------------------------------------
+		
+	def setRegleInt(self, expression):
+		self.RegleInt = expression

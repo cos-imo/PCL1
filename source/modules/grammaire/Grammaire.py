@@ -1,7 +1,9 @@
 import sys
 import modules.grammaire.Regle as Regle
 import modules.grammaire.RegleManager as RegleManager
+from automate import *
 import copy
+from graphviz import Digraph
 
 class Grammaire:
 
@@ -11,6 +13,7 @@ class Grammaire:
     def __init__(self):
 
         self.axiome = None
+        self.axiomeRegle = None
 
         self.keywords=[]
         self.grammaire_brute = self.charger_grammaire()
@@ -34,6 +37,7 @@ class Grammaire:
         self.suivants = {}
 
         self.ident = ["\n","+", "-", "*","/",":=","IDENT","cte","access", "and", "begin", "else", "elsif", "end","false", "for", "function", "if", "in", "is","loop", "new", "not", "null", "or", "out","procedure", "record", "rem", "return", "reverse", "then","true", "type", "use", "while", "with","]",":","(",")",",",";","=",".","'",">","<","str"]
+        self.axiomeInt = None
 
         self.setRegleByPremier()
         #print(self.regle_by_premier)
@@ -43,10 +47,19 @@ class Grammaire:
         
         self.setSuscribers()
         self.ajouter_premier_terminaux()
+        #self.setPremierByNonTerminal()
+        #self.clearPremiers()
+
+
         # self.set_premiers_regle()
         #self.calcul_suivants()
+        self.premiersDico = {}
+
+        self.PremierDico()
+        self.premiersDicoToInt()
         self.premierToInt()
-        print(self.premiers_non_terminaux)
+        # print(self.premiers_non_terminaux)
+        self.RegleToInt()
         #print(self.suivants)
 
     # ---------------------------------------------------------------------------------------------------------------
@@ -119,9 +132,9 @@ class Grammaire:
     def setRegleByPremier(self):
         for regle in self.manager.ensemble_regles:
             if regle.membre_gauche not in self.regle_by_premier:
-                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]] = [regle]
+                self.regle_by_premier[regle.membre_gauche] = [regle]
             else:
-                self.regle_by_premier[self.premiers_non_terminaux[regle.membre_gauche]].append(regle)
+                self.regle_by_premier[regle.membre_gauche].append(regle)
 
     def setSuscribers(self):
         for regle in self.manager.ensemble_regles:
@@ -242,7 +255,32 @@ class Grammaire:
     
     def premierToInt(self):
         for entry in self.premiers_non_terminaux:
-            self.premiers_non_terminaux[entry] = [self.ident.index(element) for element in self.premiers_non_terminaux[entry]]
+            automate = Automate()
+            self.premiers_non_terminaux[entry] = [automate.est_accepte(element) for element in self.premiers_non_terminaux[entry]]
+
+    def RegleToInt(self):
+        for regle in self.manager.ensemble_regles:
+            automate = Automate()
+            regleInt = automate.est_accepte(regle.raw_regle)
+            regle.setRegleInt(regleInt[0][2:])
+            if regle.raw_regle.split(" ")[0] == "FICHIER":
+                self.axiomeInt = regle.RegleInt
+                self.axiomeRegle = regle
+
+    def PremierDico(self):
+        for regle in self.manager.ensemble_regles:
+            for element in self.premiers_non_terminaux[regle.membre_gauche]:
+                if element not in self.premiersDico:
+                    self.premiersDico[element] = [regle]
+                else:
+                    self.premiersDico[element].append(regle)
+
+    def premiersDicoToInt(self):
+        for key, value in list(self.premiersDico.items()):
+            automate = Automate()
+            new_key = (automate.est_accepte(key))
+            del self.premiersDico[key]
+            self.premiersDico[new_key[0][0]] = value
+
 if __name__=="__main__":
     grammaire = Grammaire()
-    #grammaire.affiche()

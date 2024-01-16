@@ -356,8 +356,8 @@ class Automate:
 def main(fichier):
     automate = Automate()
 
-    with open(fichier, 'r') as file:
-        code = file.read()
+    # with open(fichier, 'r') as file:
+    #     code = file.read()
 
     automate.est_accepte(code)
     print('\n')
@@ -379,6 +379,8 @@ def main(fichier):
     """
 
     reconstruit = automate.reconstruction("fichier_reconstruit.txt")
+
+    return code_compi
 
 
 if __name__ == "__main__":
