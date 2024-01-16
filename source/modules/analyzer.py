@@ -1,4 +1,5 @@
 from grammaire import *
+from automate import *
 
 def main():
     fichier = """with Ada.Text_IO;
@@ -18,7 +19,16 @@ def main():
 
     grammaire = Grammaire.Grammaire()
 
-    print(grammaire.premiers_non_terminaux)
+    automate = Automate()
+
+    liste_token = automate.liste_token
+
+    current_regle = grammaire.axiome
+
+    # for token in liste_token:
+    #     if token in 
+
+    #print(grammaire.premiers_non_terminaux)
 
 if __name__=="__main__":
     main()

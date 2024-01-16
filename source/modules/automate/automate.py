@@ -340,14 +340,14 @@ def main(fichier):
     automate = Automate()
 
     code_compi = automate.est_accepte(fichier)
-    print('\n')
-    print(f'{automate.table_const = }')
-    print('\n')
-    print(f'{automate.table_idf = }')
-    print('\n')
-    print(f'{automate.table_chaine_cara = }')
-    print('\n')
-    print(f'code tokenizé : {code_compi[0]  }')
+    # print('\n')
+    # print(f'{automate.table_const = }')
+    # print('\n')
+    # print(f'{automate.table_idf = }')
+    # print('\n')
+    # print(f'{automate.table_chaine_cara = }')
+    # print('\n')
+    # print(f'code tokenizé : {code_compi[0]  }')
         
     """        ###
         if not code_compi[2]:
@@ -357,3 +357,5 @@ def main(fichier):
     """
 
     reconstruit = automate.reconstruction("output/fichier_reconstruit.txt")
+
+    return code_compi
