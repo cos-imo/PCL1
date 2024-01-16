@@ -37,7 +37,7 @@ print(res)
 
 grammaire = Grammaire.Grammaire()
 
-axiome = grammaire.axiomeInt
+axiome = grammaire.axiomeRegle.RegleInt[1:]
 
 currentRule = axiome
 

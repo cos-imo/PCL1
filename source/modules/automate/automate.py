@@ -342,18 +342,18 @@ class Automate:
 def main(fichier):
     automate = Automate()
 
-    with open(fichier, 'r') as file:
-        code = file.read()
+    # with open(fichier, 'r') as file:
+    #     code = file.read()
 
-    code_compi = automate.est_accepte(code)
-    print('\n')
-    print(f'{automate.table_const = }')
-    print('\n')
-    print(f'{automate.table_idf = }')
-    print('\n')
-    print(f'{automate.table_chaine_cara = }')
-    print('\n')
-    print(f'code tokenizé : {code_compi[0]  }')
+    code_compi = automate.est_accepte(fichier)
+    # print('\n')
+    # print(f'{automate.table_const = }')
+    # print('\n')
+    # print(f'{automate.table_idf = }')
+    # print('\n')
+    # print(f'{automate.table_chaine_cara = }')
+    # print('\n')
+    # print(f'code tokenizé : {code_compi[0]  }')
         
     """        ###
         if not code_compi[2]:

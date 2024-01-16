@@ -13,6 +13,7 @@ class Grammaire:
     def __init__(self):
 
         self.axiome = None
+        self.axiomeRegle = None
 
         self.keywords=[]
         self.grammaire_brute = self.charger_grammaire()
@@ -258,6 +259,7 @@ class Grammaire:
             regle.setRegleInt(regleInt[0][2:])
             if regle.raw_regle.split(" ")[0] == "FICHIER":
                 self.axiomeInt = regle.RegleInt
+                self.axiomeRegle = regle
 
 if __name__=="__main__":
     grammaire = Grammaire()
