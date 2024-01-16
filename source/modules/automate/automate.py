@@ -3,13 +3,16 @@ import string as string
 class Automate:
     def __init__(self):
 
-        self.table_idf         = []
-        self.table_const       = []
-        self.table_chaine_cara = []
-        self.liste_token       = []
+        self.table_idf         = []   # liste avec tout les identifiants détectés dans le code
+        self.table_const       = []   # liste avec tout les constantes détectés dans le code
+        self.table_chaine_cara = []   # liste avec tout les chaines de caractères détectés dans le code
+        self.liste_token       = []   # liste avec tout les token du code
+        self.error_message     = []
+        self.alphabet          = string.ascii_letters + string.digits + '_'
+        self.table_error_token = []   # liste avec tout les token qui ne sont pas reconnue
 
-        self.alphabet = string.ascii_lowercase + string.ascii_uppercase + "_"
-        self.etat_comp = None  # None si pas encore faite, True si réussite, False si échec
+
+        self.etat_comp = None #None avant lecture, True si réussite, False si échec
         self.token_par_ligne = [] # liste des nombre de token par ligne (ça va permettre de retrouver la ligne d'erreur lors de l'analyse syntaxique)
 
         #le codage des unités lexicales se trouve dans le fichier codage_dse_lexique.txt
@@ -20,6 +23,13 @@ class Automate:
             "procedure", "record", "rem", "return", "reverse", "then",
             "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<'
         ]
+
+    def print_error(self):
+        """
+        Affiche les erreurs de compilation
+        """
+        for error in self.error_message:
+            print(error)
 
 
     def codage_token(self, token):
@@ -280,23 +290,27 @@ class Automate:
                 continue
             
             if cara in self.alphabet:
-                
+
                 token_courant += cara
                 ind_cara_lu += 1
                 continue
 
             else:
+                print(cara)
                 # si le caractère n'est traité par aucuns des cas au dessus c'est qu'il n'est pas reconnu
                 message_erreur = self.gene_message_erreur(token_courant, cara, ligne, "Caractère non reconnu")
                 self.etat_comp  = False
-                print(message_erreur)
-                return self.liste_token, ligne, False, message_erreur
+                self.error_message.append(message_erreur)
+                self.table_error_token.append(token_courant + cara)
+                self.liste_token.append((48, len(self.table_error_token)))
+                ind_cara_lu += 1
+                token_courant = ''
 
         if token_courant not in ('',' ', '\t', '\n'):
             self.liste_token.append(self.codage_token(token_courant))
             self.token_par_ligne[-1]+=1
-        self.etat_comp = True
-        return self.liste_token, ligne, True
+        if self.etat_comp == None:
+            self.etat_comp = True
 
     def reconstruction(self, adresse_txt):
         """
@@ -345,7 +359,7 @@ def main(fichier):
     with open(fichier, 'r') as file:
         code = file.read()
 
-    code_compi = automate.est_accepte(code)
+    automate.est_accepte(code)
     print('\n')
     print(f'{automate.table_const = }')
     print('\n')
@@ -353,7 +367,9 @@ def main(fichier):
     print('\n')
     print(f'{automate.table_chaine_cara = }')
     print('\n')
-    print(f'code tokenizé : {code_compi[0]  }')
+    print(f'code tokenizé : {automate.liste_token}') 
+    
+    automate.print_error()
         
     """        ###
         if not code_compi[2]:

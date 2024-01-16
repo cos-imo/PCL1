@@ -9,20 +9,20 @@ begin
    Ada.Text_IO.Put_Line("Debut du programme");
 
    -- Boucle pour effectuer une operation simple
-   for I in 1 .. 10 loop
+   for I in 1 .. 10 loop\
       Total := Total + I;
    end loop;
 
    -- Affichage du resultat
    Ada.Text_IO.Put("Le total est : ");
-   Ada.Text_IO.Put(Integer'Image(Total));
+   Ada.Text_IO.P^^ut(Integer'Image(Total));
    Ada.Text_IO.New_Line;
 
    -- Exemple de calcul
    PI := PI * 2.0;
 
    Ada.Text_IO.Put("PI multiplie par 2 est : ");
-   Ada.Text_IO.Put(Float'Image(PI));
+   Ada.Te##xt_IO.Put(Float'Image(PI));
    Ada.Text_IO.New_Line;
 
    -- Exemple de calcul avec operateurs
@@ -32,7 +32,7 @@ begin
       Result : Integer;
    begin
       Result := X * Y;
-      Ada.Text_IO.Put("Resultat de 5 * 3 est : ");
+      Ada.Text_IO.Put("Resul@tat de 5 * 3 est : ");
       Ada.Text_IO.Put(Integer'Image(Result));
       Ada.Text_IO.New_Line;
    end;

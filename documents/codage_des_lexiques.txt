@@ -26,3 +26,4 @@ mots = [
 >      || 45
 <      || 46
 'str'  || 47  => les chaînes de caractère se trouverons dans leur propre bucket
+token_error || 48
