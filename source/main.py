@@ -37,6 +37,8 @@ print(res)
 
 grammaire = Grammaire.Grammaire()
 
+print(grammaire.premiersDico)
+
 axiome = grammaire.axiomeRegle.RegleInt[1:]
 
 currentRule = axiome

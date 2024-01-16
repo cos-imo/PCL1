@@ -50,6 +50,10 @@ class Grammaire:
         #self.setPremierByNonTerminal()
         #self.clearPremiers()
 
+
+        self.premiersDico = {}
+
+        self.PremierDico()
         # self.set_premiers_regle()
         #self.calcul_suivants()
         self.premierToInt()
@@ -262,5 +266,13 @@ class Grammaire:
                 self.axiomeInt = regle.RegleInt
                 self.axiomeRegle = regle
 
+    def PremierDico(self):
+        for regle in self.manager.ensemble_regles:
+            for element in self.premiers_non_terminaux[regle.membre_gauche]:
+                if element not in self.premiersDico:
+                    self.premiersDico[element] = [regle]
+                else:
+                    self.premiersDico[element].append(regle)
+                    
 if __name__=="__main__":
     grammaire = Grammaire()
