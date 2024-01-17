@@ -1,5 +1,6 @@
 import modules.grammaire.Regle as Regle
 import modules.grammaire.Grammaire as Grammaire
+from automate import *
 
 class RegleManager:
 
@@ -18,12 +19,14 @@ class RegleManager:
 		self.liste_mots = liste_mots
 		self.non_terminaux = []
 		self.terminaux = []
+		self.token_terminaux = []
 		self.suivants = {}
 
 		self.ensemble_regles = []
 		self.initialiser_regles(grammaire)
 		self.set_non_terminaux()
 		self.set_terminaux()
+		self.set_token_terminaux()
 	
 
     # ---------------------------------------------------------------------------------------------------------------
@@ -79,6 +82,16 @@ class RegleManager:
 		for mot in self.liste_mots:
 			if not (mot in self.non_terminaux):
 				self.terminaux += [mot]
-	
+
 	def get_terminaux(self):
 		return self.terminaux
+	
+	def set_token_terminaux(self):
+		for mot in self.liste_mots:
+			automate = Automate()
+			token = automate.est_accepte(mot)
+			if not token in self.non_terminaux:
+				self.token_terminaux += [mot]
+	
+	def get_token_terminaux(self):
+		return self.token_terminaux

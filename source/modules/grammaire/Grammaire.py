@@ -31,6 +31,10 @@ class Grammaire:
         self.premiers_non_terminaux = {}
         self.premiers_globaux = {}
 
+        self.regleByNonTerminal = {}
+
+        self.setRegleByNonTerminal()
+
         #Dictionnaire permettant de retrouver une règle depuis le premier élément de son membre droit
         self.regle_by_premier = {}
 
@@ -135,6 +139,14 @@ class Grammaire:
                 self.regle_by_premier[regle.membre_gauche] = [regle]
             else:
                 self.regle_by_premier[regle.membre_gauche].append(regle)
+
+    def setRegleByNonTerminal(self):
+        for regle in self.manager.ensemble_regles:
+            if regle.membre_gauche not in self.regleByNonTerminal:
+                self.regleByNonTerminal[regle.membre_gauche] = [regle]
+            else:
+                self.regleByNonTerminal[regle.membre_gauche].append(regle)
+            
 
     def setSuscribers(self):
         for regle in self.manager.ensemble_regles:
