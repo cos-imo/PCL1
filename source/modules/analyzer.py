@@ -1,9 +1,46 @@
-from grammaire import *
+from grammaire import Grammaire, Regle
 from automate import *
+
+def parse_syntax(liste_token, grammaire):
+    positionStream = 0
+    stack = [grammaire.axiomeRegle.get_membre_gauche()]
+
+    while stack:
+        current_symbol = stack.pop()
+
+        if isinstance(current_symbol, tuple):
+            continue
+
+        if current_symbol in grammaire.terminaux:
+            if current_symbol == liste_token[positionStream]:
+                positionStream += 1
+            else:
+                print(f"Erreur: Prévu '{current_symbol}', recu '{liste_token[positionStream]}'")
+                return False
+
+        elif current_symbol in grammaire.non_terminaux:
+            rule_key = liste_token[positionStream]
+            if rule_key in grammaire.regle_by_premier[current_symbol]:
+                production_rule = grammaire.regle_by_premier[current_symbol][rule_key][0]
+                production_right = production_rule.get_membre_droit()
+                stack.extend(production_right[::-1])
+
+        elif current_symbol == '$':
+            if positionStream == len(liste_token):
+                print("Parsing réussi!")
+                return True
+            else:
+                print("Erreur: token après $")
+                return False
+
+        else:
+            print(f"Erreur: Token inconnu '{current_symbol}'")
+
+    return False
+
 
 def main():
     fichier = """with Ada.Text_IO;
-
     procedure exemple is
     n : integer ; 
     begin
@@ -24,21 +61,12 @@ def main():
 
     liste_token = automate.liste_token
 
-    positionStream = 0
+    print(liste_token)
 
-    currentRule = grammaire.axiomeRegle
+    if parse_syntax(liste_token, grammaire):
+        print("Analyse syntaxique réussie")
+    else:
+        print("L'analyse syntaxique à échoué")
 
-    Rules = []
-    
-    while positionStream < len(liste_token):
-        positionRule = 0
-        while currentRule.RegleInt[positionRule] == liste_token[positionStream]:
-            positionRule += 1
-            positionStream += 1
-        Rules.append(currentRule)
-        currentRule = grammaire.regle_by_premier[liste_token[positionStream]]
-    
-    #print(Rules)
-
-if __name__=="__main__":
+if __name__ == "__main__":
     main()

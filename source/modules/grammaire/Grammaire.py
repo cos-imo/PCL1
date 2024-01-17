@@ -267,7 +267,6 @@ class Grammaire:
             if regle.raw_regle.split(" ")[0] == "FICHIER":
                 self.axiomeInt = regle.RegleInt
                 self.axiomeRegle = regle
-                print(regle)
 
     def PremierDico(self):
         for regle in self.manager.ensemble_regles:
