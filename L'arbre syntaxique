@@ -1,0 +1,7 @@
+digraph {
+	A [label=fichier]
+	B [label=decl]
+	A -> B [label="with Ada.Text_IO; use Ada.Text_IO 
+ procedure <pro> is is <decl> 
+ begin <instr>end <ident> $"]
+}
