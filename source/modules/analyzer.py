@@ -1,7 +1,10 @@
 from grammaire import Grammaire, Regle
 from automate import *
 
-def parse_syntax(liste_token, grammaire):
+def parse_syntax(automate, grammaire):
+
+    liste_token = automate.liste_token
+
     positionStream = 0
     stack = [grammaire.axiomeRegle.get_membre_gauche()]
 
@@ -59,11 +62,7 @@ def main():
     automate = Automate()
     automate.est_accepte(fichier)
 
-    liste_token = automate.liste_token
-
-    print(liste_token)
-
-    if parse_syntax(liste_token, grammaire):
+    if parse_syntax(automate, grammaire):
         print("Analyse syntaxique réussie")
     else:
         print("L'analyse syntaxique à échoué")

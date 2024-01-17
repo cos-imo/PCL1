@@ -138,11 +138,12 @@ class Grammaire:
 
     def setSuscribers(self):
         for regle in self.manager.ensemble_regles:
-            if regle.membre_droit[0] not in self.non_terminaux:
-                pass
-            else:
-                for regle_sus in self.regle_by_premier[regle.membre_droit[0]]:
-                    regle_sus.addSuscriber(regle)
+            if regle.membre_droit:
+                if regle.membre_droit[0] not in self.non_terminaux:
+                    pass
+                else:
+                    for regle_sus in self.regle_by_premier[regle.membre_droit[0]]:
+                        regle_sus.addSuscriber(regle)
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 4: Fonctions utilitaires
@@ -182,13 +183,14 @@ class Grammaire:
         """
         #On parcourt les règles
         for regle in self.manager.ensemble_regles:
-            if self.est_terminal(regle.membre_droit[0]):
-                regle.set_premier_regle(regle.membre_droit[0])
-                regle.notifySuscribers(regle.membre_droit[0])
-                if regle.membre_gauche in self.premiers_non_terminaux:
-                    self.premiers_non_terminaux[regle.membre_gauche].append(regle.membre_droit[0])
-                else:
-                    self.premiers_non_terminaux[regle.membre_gauche] = [regle.membre_droit[0]]
+            if regle.membre_droit:
+                if self.est_terminal(regle.membre_droit[0]):
+                    regle.set_premier_regle(regle.membre_droit[0])
+                    regle.notifySuscribers(regle.membre_droit[0])
+                    if regle.membre_gauche in self.premiers_non_terminaux:
+                        self.premiers_non_terminaux[regle.membre_gauche].append(regle.membre_droit[0])
+                    else:
+                        self.premiers_non_terminaux[regle.membre_gauche] = [regle.membre_droit[0]]
 
     # def ajouter_premier(self, premier, non_terminal):
     #     if non_terminal not in self.premiers_non_terminaux:

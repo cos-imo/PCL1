@@ -42,6 +42,8 @@ class Regle:
 
 	def decoupe_membre_droit(self):
 		self.membre_droit = [element for element in self.regle_brute_decoupee[1].split(" ") if element!='']
+		if self.membre_droit == []:
+			self.membre_droit = None
 
 	def decoupe_membre_gauche(self):
 		self.membre_gauche = self.regle_brute_decoupee[0][:-1]
@@ -65,7 +67,8 @@ class Regle:
 			self.premier = list(set(self.premier))
 
 	def init_premier(self):
-		self.premier = [self.membre_droit[0]]
+		if self.membre_droit != None:
+			self.premier = [self.membre_droit[0]]
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 4: Fonctions utilitaires: Représentation
