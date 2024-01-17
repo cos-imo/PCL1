@@ -40,6 +40,8 @@ class Grammaire:
 
         self.suivants = {}
 
+        self.token_terminaux = self.manager.get_token_terminaux()
+
         self.ident = ["\n","+", "-", "*","/",":=","IDENT","cte","access", "and", "begin", "else", "elsif", "end","false", "for", "function", "if", "in", "is","loop", "new", "not", "null", "or", "out","procedure", "record", "rem", "return", "reverse", "then","true", "type", "use", "while", "with","]",":","(",")",",",";","=",".","'",">","<","str"]
         self.axiomeInt = None
 
@@ -65,6 +67,9 @@ class Grammaire:
         # print(self.premiers_non_terminaux)
         self.RegleToInt()
         #print(self.suivants)
+
+        self.terminaux = []
+        self.charger_terminaux()
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 2: Chargement
@@ -132,6 +137,18 @@ class Grammaire:
         for line in lst_temp:
             self.liste_mots += [element for element in line.split(" ")]
         self.liste_mots = list(set(self.liste_mots))
+    
+    def charger_terminaux(self):
+        try:
+            with open("modules/grammaire/words.gramm","r") as file:
+                data = file.readlines()
+                # On lit les données et on retourne la grammaire
+                words = [line.replace("\n","") for line in data]
+                self.terminaux = eval(''.join(words))
+        except:
+            sys.stdout.write("Warning: Fichier words.gramm non trouvé.\nVoulez-vous tenter d'ouvrir un autre fichier?\n\nOuverture d'un autre fichier impossible dans l'état actuel des choses, désolé\n")
+            exit()
+
 
     def setRegleByPremier(self):
         for regle in self.manager.ensemble_regles:
@@ -277,10 +294,22 @@ class Grammaire:
             automate = Automate()
             automate.est_accepte(regle.raw_regle)
             regleInt = automate.liste_token
-            regle.setRegleInt(regleInt[3:])
             if regle.raw_regle.split(" ")[0] == "FICHIER":
                 self.axiomeInt = regle.RegleInt
                 self.axiomeRegle = regle
+            newRegle = []
+            regleInt = regleInt[3:]
+            
+                
+            if regle.membre_droit:
+                for mot in regle.membre_droit:
+                    if self.est_terminal(mot):
+                        newRegle.append(regleInt[regle.membre_droit.index(mot)])
+                    else:
+                        newRegle.append(mot)
+                    regle.setRegleInt(newRegle)
+                    # regle.setRegleInt(regleInt[3:])
+
 
     def PremierDico(self):
         for regle in self.manager.ensemble_regles:

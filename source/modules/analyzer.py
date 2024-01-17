@@ -5,44 +5,40 @@ def parse_syntax(automate, grammaire):
 
     liste_token = automate.liste_token
 
-    print(liste_token)
     
     positionStream = 0
     stack = [grammaire.axiomeRegle.get_membre_gauche()]
+
+    token_terminaux = []
+
+    if liste_token[1:4] == [(6, 1), 43, (6, 2)]:
+        del liste_token[1:4]
+        liste_token.insert(1, 49)
+
+    print(liste_token)
     
-    print(grammaire.terminaux)
+    for terminal in grammaire.terminaux:
+        if terminal:
+            automate.est_accepte(terminal)
+            token_terminaux.append(automate.liste_token)
 
     while stack:
         current_symbol = stack.pop()
+        print(stack)
 
 
         if isinstance(current_symbol, tuple):
+            print(automate.table_idf[current_symbol[1]])
+            positionStream += 1
             continue
 
-        if current_symbol in grammaire.token_terminaux:
+        if isinstance(current_symbol, int):
             if current_symbol == liste_token[positionStream]:
                 print(current_symbol)
                 positionStream += 1
             else:
                 print(f"Erreur: Prévu '{current_symbol}', recu '{liste_token[positionStream]}'")
                 return False
-
-        elif current_symbol in grammaire.non_terminaux:
-            print(current_symbol)
-            listeRegleAjout = grammaire.regleByNonTerminal[current_symbol]
-            for regle in listeRegleAjout:
-                if regle.get_membre_droit()[0] == liste_token[positionStream]:
-                    RegleAjout = regle
-            stack.extend(regle.RegleInt[::-1])
-            # rule_key = liste_token[positionStream]
-            # if rule_key in grammaire.premiersDico[current_symbol]:
-            #     production_rule = regleAjout[rule_key][0]
-            #     production_right = production_rule.get_membre_droit()
-            #     stack.extend(production_right[::-1])
-            #     print(stack)
-            # else:
-            #     print(f"ERREUR: Règle non trouvée pour {current_symbol}, token: {liste_token[positionStream]}")
-
 
         elif current_symbol == '$':
             print("Fin atteinte")
@@ -52,6 +48,21 @@ def parse_syntax(automate, grammaire):
             else:
                 print("Erreur: token après $")
                 return False
+            
+        elif isinstance(current_symbol, str):
+            listeRegleAjout = grammaire.regleByNonTerminal[current_symbol]
+            for regle in listeRegleAjout:
+                if regle.RegleInt[0] == liste_token[positionStream]:
+                    RegleAjout = regle
+            stack.extend(RegleAjout.RegleInt[::-1])
+            # rule_key = liste_token[positionStream]
+            # if rule_key in grammaire.premiersDico[current_symbol]:
+            #     production_rule = regleAjout[rule_key][0]
+            #     production_right = production_rule.get_membre_droit()
+            #     stack.extend(production_right[::-1])
+            #     print(stack)
+            # else:
+            #     print(f"ERREUR: Règle non trouvée pour {current_symbol}, token: {liste_token[positionStream]}")
 
         else:
             print(f"Erreur: Token inconnu '{current_symbol}'")
@@ -74,10 +85,10 @@ def main():
     end loop ; 
     end exemple ;"""
 
-    grammaire = Grammaire.Grammaire()
 
     automate = Automate()
     automate.est_accepte(fichier)
+    grammaire = Grammaire.Grammaire()
 
     if parse_syntax(automate, grammaire):
         print("Analyse syntaxique réussie")
