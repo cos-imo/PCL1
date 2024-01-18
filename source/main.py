@@ -34,20 +34,23 @@ if parser.args.create_dump:
 
 automate = Automate()
 automate.est_accepte(data)
-grammaire = Grammaire.Grammaire()
-print(automate.table_idf)
-if parser.args.tree:
-    if parse_syntax(automate, grammaire, True):
-        print("Analyse syntaxique réussie")
+if automate.etat_comp:
+    grammaire = Grammaire.Grammaire()
+    print(automate.table_idf)
+    if parser.args.tree:
+        if parse_syntax(automate, grammaire, True):
+            print("Analyse syntaxique réussie")
+        else:
+            print("L'analyse syntaxique à échoué")
+            print(automate.liste_token)
     else:
-        print("L'analyse syntaxique à échoué")
-        print(automate.liste_token)
+        if parse_syntax(automate, grammaire):
+            print("Analyse syntaxique réussie")
+        else:
+            print("L'analyse syntaxique à échoué")
+            print(automate.liste_token)
 else:
-    if parse_syntax(automate, grammaire):
-        print("Analyse syntaxique réussie")
-    else:
-        print("L'analyse syntaxique à échoué")
-        print(automate.liste_token)
+    automate.print_error()
 
 # res = main(data)
 
