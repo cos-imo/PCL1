@@ -52,8 +52,9 @@ def parse_syntax(automate, grammaire, display_graph = False):
         if isinstance(current_symbol, int):
             if current_symbol == liste_token[positionStream]:
                 positionStream += 1
-                dot.node(str(current_symbol), str(current_symbol))
-                dot.edge(reglesArbre[-1],str(current_symbol))
+                if display_graph:
+                    dot.node(str(current_symbol), str(current_symbol))
+                    dot.edge(reglesArbre[-1],str(current_symbol))
                 try:
                     tailleRegle[-1][1]+=1
                     if tailleRegle[-1][1] == tailleRegle[-1][0]:
