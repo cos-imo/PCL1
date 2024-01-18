@@ -42,10 +42,7 @@ def parse_syntax(automate, grammaire, display_graph = False):
         print(f"{liste_token[positionStream] = }\n\n")
 
         if isinstance(current_symbol, tuple):
-            print(f"{stack[-1] = }")
-            print(f"{stack[-2] = }")
             if current_symbol == (6,2) and stack[-1] == 43 and stack[-2] == (6,3):
-                print("Passage au 49")
                 stack.pop()
                 stack.pop()
                 current_symbol = 49
@@ -53,7 +50,6 @@ def parse_syntax(automate, grammaire, display_graph = False):
                 positionStream += 1
 
         if isinstance(current_symbol, int):
-            print(f"{liste_token[positionStream] = }")
             if current_symbol == liste_token[positionStream]:
                 positionStream += 1
                 dot.node(str(current_symbol), str(current_symbol))
@@ -84,7 +80,6 @@ def parse_syntax(automate, grammaire, display_graph = False):
 
             
         elif isinstance(current_symbol, str):
-            print(f"{liste_token[positionStream + 1] =}")
             if current_symbol == "DECLETOILE":
 
                 if regle.membre_droit:
@@ -123,15 +118,10 @@ def parse_syntax(automate, grammaire, display_graph = False):
                                 if display_graph:
                                     if tailleRegle:
                                         if tailleRegle[-1]:
-                                            print(reglesArbre)
-                                            print(reglesArbre[::-1])
                                             reglesArbre.append(f"{regle.membre_gauche}{indice}")
                                             dot.node(f"{regle.membre_gauche}{indice}", f"{regle.membre_gauche}{indice}")
                                             indice += 1
                                             #dot.edges(reglesArbre[-1], reglesArbre[-2])
-                                            print("#######")
-                                            
-                                            print('######')
                                             dot.edge(regle.membre_gauche, str(reglesArbre[-2]))
                                         else:
                                             tailleRegle.append(len(regle.membre_droit))
@@ -152,14 +142,12 @@ def parse_syntax(automate, grammaire, display_graph = False):
                                 RegleAjout = regle
                                 regles.append(regle.raw_regle)
                                 stack.extend(RegleAjout.RegleInt[::-1])
-                                print(reglesArbre)
                                 if display_graph:
                                     reglesArbre.append(regle.membre_gauche)
                                     tailleRegle.append(len(regle.membre_droit))
                                     dot.node(f"{regle.membre_gauche}{indice}", f"{regle.membre_gauche}{indice}")
                                     indice += 1
                             elif regle.membre_gauche == "IDENT":
-                                print(f"{liste_token[positionStream] = }")
                                 pass
                         else:
                             if liste_token[positionStream + 1] == 10:
