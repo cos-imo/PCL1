@@ -17,6 +17,8 @@ def parse_syntax(automate, grammaire):
 
     print(liste_token)
 
+    regles = []
+
     for terminal in grammaire.terminaux:
         if terminal:
             automate.est_accepte(terminal)
@@ -56,6 +58,8 @@ def parse_syntax(automate, grammaire):
 
  
             print("Parsing réussi!")
+
+            print(regles)
             return True
 
             
@@ -75,11 +79,13 @@ def parse_syntax(automate, grammaire):
                         if regle.premier:
                             if "id" in regle.premier:
                                 RegleAjout = regle
+                                regles.append(regle.raw_regle)
                                 stack.extend(RegleAjout.RegleInt[::-1])
                     else:
                         if regle.membre_droit:
                             if regle.RegleInt[0] == liste_token[positionStream]:
                                 RegleAjout = regle
+                                regles.append(regle.raw_regle)
                                 stack.extend(RegleAjout.RegleInt[::-1])
                             elif regle.membre_gauche == "IDENT":
                                 print(f"{liste_token[positionStream] = }")
