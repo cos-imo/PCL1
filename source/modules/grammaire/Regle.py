@@ -77,12 +77,15 @@ class Regle:
 	def __repr__(self):
 		membre_droit_str = ""
 		premier_str = ""
+		token_str = ""
 		if self.membre_droit:
 			for element in self.membre_droit:
 				membre_droit_str += element + " "
 			for premier in self.premier:
-				premier_str += premier
-		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\t\tMembre gauche: " + self.membre_gauche + "\n\t\tMembre droit: " + membre_droit_str + "\n\t\tPremier: " + premier_str
+				premier_str += premier+ " - "
+			for token in self.RegleInt:
+				token_str += str(token) + " - "
+		return "Regle\n\n\tExpresion: " + self.raw_regle + "\n\t\tMembre gauche: " + self.membre_gauche + "\n\t\tMembre droit: " + membre_droit_str + "\n\t\tPremier: " + premier_str +"\n\t\tTokens: " + token_str
 
     # ---------------------------------------------------------------------------------------------------------------
     # Section 5: Observateurs

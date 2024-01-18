@@ -16,7 +16,7 @@ def parse_syntax(automate, grammaire):
         liste_token.insert(1, 49)
 
     print(liste_token)
-    
+
     for terminal in grammaire.terminaux:
         if terminal:
             automate.est_accepte(terminal)
@@ -25,36 +25,72 @@ def parse_syntax(automate, grammaire):
     while stack:
         current_symbol = stack.pop()
         print(stack)
+        print(f"#########{current_symbol = }, {positionStream = } ############")
 
+        print(f"{current_symbol = }")
+        print(f"{positionStream = }")
+        print(f"{liste_token[positionStream] = }\n\n")
 
         if isinstance(current_symbol, tuple):
-            print(automate.table_idf[current_symbol[1]])
-            positionStream += 1
-            continue
+            print(f"{stack[-1] = }")
+            print(f"{stack[-2] = }")
+            if current_symbol == (6,2) and stack[-1] == 43 and stack[-2] == (6,3):
+                print("Passage au 49")
+                stack.pop()
+                stack.pop()
+                current_symbol = 49
+            else:
+                positionStream += 1
 
         if isinstance(current_symbol, int):
+            print(f"{liste_token[positionStream] = }")
             if current_symbol == liste_token[positionStream]:
-                print(current_symbol)
                 positionStream += 1
+                continue
             else:
                 print(f"Erreur: Prévu '{current_symbol}', recu '{liste_token[positionStream]}'")
                 return False
 
-        elif current_symbol == '$':
+        elif current_symbol == 'eof':
             print("Fin atteinte")
-            if positionStream == len(liste_token):
-                print("Parsing réussi!")
-                return True
-            else:
-                print("Erreur: token après $")
-                return False
+
+ 
+            print("Parsing réussi!")
+            return True
+
             
         elif isinstance(current_symbol, str):
-            listeRegleAjout = grammaire.regleByNonTerminal[current_symbol]
-            for regle in listeRegleAjout:
-                if regle.RegleInt[0] == liste_token[positionStream]:
-                    RegleAjout = regle
-            stack.extend(RegleAjout.RegleInt[::-1])
+            print(f"{liste_token[positionStream + 1] =}")
+            if current_symbol == "DECLETOILE":
+                if liste_token[positionStream] == 26:
+                    stack.append("DECL")
+                    continue
+                if liste_token[positionStream]==10:
+                    continue
+
+            if current_symbol != "id":
+                listeRegleAjout = grammaire.regleByNonTerminal[current_symbol]
+                for regle in listeRegleAjout:
+                    if isinstance(liste_token[positionStream], tuple):
+                        if regle.premier:
+                            if "id" in regle.premier:
+                                RegleAjout = regle
+                                stack.extend(RegleAjout.RegleInt[::-1])
+                    else:
+                        if regle.membre_droit:
+                            if regle.RegleInt[0] == liste_token[positionStream]:
+                                RegleAjout = regle
+                                stack.extend(RegleAjout.RegleInt[::-1])
+                            elif regle.membre_gauche == "IDENT":
+                                print(f"{liste_token[positionStream] = }")
+                                pass
+                        else:
+                            if liste_token[positionStream + 1] == 10:
+                                #positionStream += 1
+                                pass
+            else:
+                # Gérer l'identifiant
+                positionStream += 1
             # rule_key = liste_token[positionStream]
             # if rule_key in grammaire.premiersDico[current_symbol]:
             #     production_rule = regleAjout[rule_key][0]
@@ -71,29 +107,40 @@ def parse_syntax(automate, grammaire):
 
 
 def main():
+    
     fichier = """with Ada.Text_IO;
-    procedure exemple is
-    n : integer ; 
-    begin
-    loop
-        Ada.Text_IO.Put("Saisir un nombre : ") ;
-        Ada.Text_IO.Get(n) ; 
-        if n mod 2 := 0
-            then Ada.Text_IO.Put("Ce nombre est pair ! Bien joué !") ;
-            else Ada.Text_IO.Put("Ce nombre est impair ! Veuillez recommencer. ") ; 
-        end if ; 
-    end loop ; 
-    end exemple ;"""
+
+                    procedure Proced is
+                    a : integer := 1; 
+                    b : integer := 2;
+                    c : integer := 3;
+
+                    procedure eq is
+                                i : integer := 1;
+                            begin
+                                d := a ; 
+                            end eq;
+
+                    begin
+
+                    a := 1; 
+                    b := 1; 
+
+                    eq;
+
+
+                    end Proced;"""
 
 
     automate = Automate()
     automate.est_accepte(fichier)
     grammaire = Grammaire.Grammaire()
-
+    print(automate.table_idf)
     if parse_syntax(automate, grammaire):
         print("Analyse syntaxique réussie")
     else:
         print("L'analyse syntaxique à échoué")
+        print(automate.liste_token)
 
 if __name__ == "__main__":
     main()

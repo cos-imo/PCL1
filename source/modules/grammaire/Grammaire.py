@@ -28,6 +28,15 @@ class Grammaire:
         self.terminaux = self.manager.get_terminaux()
         self.non_terminaux = self.manager.get_non_terminaux()
 
+        self.mots = ['a','+','-','*','/',':=', None, None,
+    "access", "and", "begin", "else", "elsif", "end",
+    "false", "for", "function", "if", "in", "is",
+    "loop", "new", "not", "null", "or", "out",
+    "procedure", "record", "rem", "return", "reverse", "then",
+    "true", "type", "use", "while", "with", ':', '(', ')', ',', ';', '=', '.', "'",'>','<', None
+  ]
+
+
         self.premiers_non_terminaux = {}
         self.premiers_globaux = {}
 
@@ -291,33 +300,34 @@ class Grammaire:
 
     def RegleToInt(self):
         for regle in self.manager.ensemble_regles:
-            automate = Automate()
-            automate.est_accepte(regle.raw_regle)
-            regleInt = automate.liste_token
             if regle.raw_regle.split(" ")[0] == "FICHIER":
+                print(regle.membre_droit)
+                print(regle.raw_regle.split(" "))
                 self.axiomeInt = regle.RegleInt
                 self.axiomeRegle = regle
             newRegle = []
-            regleInt = regleInt[3:]
-            
                 
             if regle.membre_droit:
                 for mot in regle.membre_droit:
-                    if self.est_terminal(mot):
-                        newRegle.append(regleInt[regle.membre_droit.index(mot)])
+                    if mot == "Ada.Text_IO":
+                        newRegle.append(49)
+                    elif mot in self.mots:
+                        newRegle.append(self.mots.index(mot))
                     else:
                         newRegle.append(mot)
-                    regle.setRegleInt(newRegle)
+                regle.setRegleInt(newRegle)
+                print(regle)
                     # regle.setRegleInt(regleInt[3:])
 
 
     def PremierDico(self):
         for regle in self.manager.ensemble_regles:
-            for element in self.premiers_non_terminaux[regle.membre_gauche]:
-                if element not in self.premiersDico:
-                    self.premiersDico[element] = [regle]
-                else:
-                    self.premiersDico[element].append(regle)
+            if regle.membre_gauche in self.premiers_non_terminaux:
+                for element in self.premiers_non_terminaux[regle.membre_gauche]:
+                    if element not in self.premiersDico:
+                        self.premiersDico[element] = [regle]
+                    else:
+                        self.premiersDico[element].append(regle)
 
     def premiersDicoToInt(self):
         for key, value in list(self.premiersDico.items()):
