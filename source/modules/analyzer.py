@@ -1,10 +1,13 @@
 from grammaire import Grammaire, Regle
 from automate import *
+from graphviz import *
 
-def parse_syntax(automate, grammaire):
+def parse_syntax(automate, grammaire, display_graph = False):
 
     liste_token = automate.liste_token
 
+    if display_graph:
+        dot = Digraph(comment='Arbre')
     
     positionStream = 0
     stack = [grammaire.axiomeRegle.get_membre_gauche()]
@@ -56,6 +59,8 @@ def parse_syntax(automate, grammaire):
         elif current_symbol == 'eof':
             print("Fin atteinte")
 
+            if display_graph:
+                dot.view()
  
             print("Parsing réussi!")
 
@@ -68,6 +73,8 @@ def parse_syntax(automate, grammaire):
             if current_symbol == "DECLETOILE":
                 if liste_token[positionStream] == 26:
                     stack.append("DECL")
+                    if display_graph:
+                        dot.node("DECL", "DECL")
                     continue
                 if liste_token[positionStream]==10:
                     continue
@@ -80,6 +87,8 @@ def parse_syntax(automate, grammaire):
                             if "id" in regle.premier:
                                 RegleAjout = regle
                                 regles.append(regle.raw_regle)
+                                if display_graph:
+                                    dot.node(regle.membre_gauche)
                                 stack.extend(RegleAjout.RegleInt[::-1])
                     else:
                         if regle.membre_droit:
@@ -87,6 +96,8 @@ def parse_syntax(automate, grammaire):
                                 RegleAjout = regle
                                 regles.append(regle.raw_regle)
                                 stack.extend(RegleAjout.RegleInt[::-1])
+                                if display_graph:
+                                    dot.node(regle.membre_gauche)
                             elif regle.membre_gauche == "IDENT":
                                 print(f"{liste_token[positionStream] = }")
                                 pass
@@ -96,6 +107,8 @@ def parse_syntax(automate, grammaire):
                                 pass
             else:
                 # Gérer l'identifiant
+                if display_graph:
+                    dot.node("id")
                 positionStream += 1
             # rule_key = liste_token[positionStream]
             # if rule_key in grammaire.premiersDico[current_symbol]:

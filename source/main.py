@@ -5,6 +5,7 @@ from token_analyser import *
 from token_generator import *
 from error_handler import *
 from grammaire import *
+from analyzer import *
 import sys, os
 
 parser=Parser()
@@ -31,16 +32,33 @@ if parser.args.create_dump:
    exporter.create_dump_file(token_list, dump_mode)
 """
 
-res = main(data)
-
-print(res)
-
+automate = Automate()
+automate.est_accepte(data)
 grammaire = Grammaire.Grammaire()
+print(automate.table_idf)
+if parser.args.tree:
+    if parse_syntax(automate, grammaire, True):
+        print("Analyse syntaxique réussie")
+    else:
+        print("L'analyse syntaxique à échoué")
+        print(automate.liste_token)
+else:
+    if parse_syntax(automate, grammaire):
+        print("Analyse syntaxique réussie")
+    else:
+        print("L'analyse syntaxique à échoué")
+        print(automate.liste_token)
 
-print(grammaire.premiersDico)
+# res = main(data)
 
-axiome = grammaire.axiomeRegle.RegleInt[1:]
+# print(res)
 
-currentRule = axiome
+# grammaire = Grammaire.Grammaire()
 
-print(axiome)
+# print(grammaire.premiersDico)
+
+# axiome = grammaire.axiomeRegle.RegleInt[1:]
+
+# currentRule = axiome
+
+# print(axiome)
